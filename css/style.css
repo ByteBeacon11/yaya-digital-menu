@@ -116,6 +116,16 @@ body {
   grid-column: 1 / -1;
 }
 
+.subsection-label {
+  font-size: 1.1rem;
+  color: #5a3a2a;
+  margin: 20px 0 10px;
+  padding: 5px 12px;
+  background: #f5e6d3;
+  border-radius: 8px;
+  grid-column: 1 / -1;
+}
+
 .item-type {
   font-size: 0.7rem;
   font-weight: 700;
