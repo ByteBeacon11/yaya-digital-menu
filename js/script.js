@@ -2,88 +2,373 @@ const ETB_RATE = 130;
 const formatETB = (usd) => (usd * ETB_RATE).toFixed(0);
 
 const menuData = [
-  // ── Ethiopian – Non-Fasting ──
-  { id: 1,  name: 'Doro Wat',     desc: 'Spicy chicken stew simmered with berbere spice and hard-boiled eggs, served with injera', price: 14.00, section: 'ethiopian', type: 'non-fasting' },
-  { id: 2,  name: 'Sega Wat',     desc: 'Rich and flavorful beef stew slow-cooked in berbere sauce', price: 15.00, section: 'ethiopian', type: 'non-fasting' },
-  { id: 3,  name: 'Bozena Shiro', desc: 'Savory shiro stew with tender pieces of beef', price: 13.00, section: 'ethiopian', type: 'non-fasting' },
-  { id: 4,  name: 'Tibs',         desc: 'Sautéed meat with onions, peppers, and aromatic spices', price: 15.00, section: 'ethiopian', type: 'non-fasting' },
-  { id: 5,  name: 'Teferesho',    desc: 'Traditional Ethiopian tripe dish prepared with spiced butter and herbs', price: 14.00, section: 'ethiopian', type: 'non-fasting' },
-  { id: 6,  name: 'Kitfo',        desc: 'Minced raw beef seasoned with mitmita and clarified butter', price: 16.00, section: 'ethiopian', type: 'non-fasting' },
+  // ══════════════════════════════════════════
+  // ETHIOPIAN – NON-FASTING
+  // ══════════════════════════════════════════
+  {
+    id: 1, name: 'Doro Wat', price: 14.00, section: 'ethiopian', type: 'non-fasting',
+    desc: 'Spicy chicken stew simmered with berbere spice and hard-boiled eggs, served with injera',
+    ingredients: ['Chicken', 'Berbere', 'Onions', 'Hard-boiled Eggs', 'Injera', 'Niter Kibbeh']
+  },
+  {
+    id: 2, name: 'Sega Wat', price: 15.00, section: 'ethiopian', type: 'non-fasting',
+    desc: 'Rich and flavorful beef stew slow-cooked in berbere sauce',
+    ingredients: ['Beef', 'Berbere', 'Onions', 'Garlic', 'Niter Kibbeh', 'Injera']
+  },
+  {
+    id: 3, name: 'Bozena Shiro', price: 13.00, section: 'ethiopian', type: 'non-fasting',
+    desc: 'Savory shiro stew with tender pieces of beef',
+    ingredients: ['Beef', 'Chickpea Flour', 'Berbere', 'Onions', 'Garlic', 'Injera']
+  },
+  {
+    id: 4, name: 'Tibs', price: 15.00, section: 'ethiopian', type: 'non-fasting',
+    desc: 'Sautéed meat with onions, peppers, and aromatic spices',
+    ingredients: ['Beef/Lamb', 'Onions', 'Bell Peppers', 'Rosemary', 'Niter Kibbeh', 'Injera']
+  },
+  {
+    id: 5, name: 'Teferesho', price: 14.00, section: 'ethiopian', type: 'non-fasting',
+    desc: 'Traditional Ethiopian tripe dish prepared with spiced butter and herbs',
+    ingredients: ['Tripe', 'Niter Kibbeh', 'Spiced Butter', 'Herbs', 'Injera']
+  },
+  {
+    id: 6, name: 'Kitfo', price: 16.00, section: 'ethiopian', type: 'non-fasting',
+    desc: 'Minced raw beef seasoned with mitmita and clarified butter',
+    ingredients: ['Minced Beef', 'Mitmita', 'Clarified Butter', 'Ayib', 'Injera']
+  },
 
-  // ── Ethiopian – Fasting ──
-  { id: 7,  name: 'Shiro Wat',    desc: 'Creamy chickpea and lentil stew simmered with garlic and berbere', price: 9.00, section: 'ethiopian', type: 'fasting' },
-  { id: 8,  name: 'Misir Wat',    desc: 'Red lentil stew cooked in spicy berbere sauce', price: 8.50, section: 'ethiopian', type: 'fasting' },
-  { id: 9,  name: 'Gomen',        desc: 'Sautéed collard greens with garlic, ginger, and onions', price: 8.00, section: 'ethiopian', type: 'fasting' },
-  { id: 10, name: 'Beyaynet',     desc: 'Assorted vegetarian platter with shiro, misir, gomen, and more', price: 12.00, section: 'ethiopian', type: 'fasting' },
-  { id: 11, name: 'Pasta Besego', desc: 'Pasta tossed with seasoned minced meat sauce', price: 10.00, section: 'ethiopian', type: 'fasting' },
-  { id: 12, name: 'Pasta Batikelt', desc: 'Pasta with fresh sautéed vegetables in light tomato sauce', price: 9.00, section: 'ethiopian', type: 'fasting' },
-  { id: 13, name: 'Denech Wat',   desc: 'Hearty potato stew seasoned with turmeric and herbs', price: 8.50, section: 'ethiopian', type: 'fasting' },
-  { id: 14, name: 'Ruz Besoya',   desc: 'Rice with flavorful meat sauce and aromatic spices', price: 10.00, section: 'ethiopian', type: 'fasting' },
-  { id: 15, name: 'Tegabino',     desc: 'Traditional thick bean and grain stew, rich and filling', price: 9.50, section: 'ethiopian', type: 'fasting' },
+  // ══════════════════════════════════════════
+  // ETHIOPIAN – FASTING
+  // ══════════════════════════════════════════
+  {
+    id: 7, name: 'Shiro Wat', price: 9.00, section: 'ethiopian', type: 'fasting',
+    desc: 'Creamy chickpea and lentil stew simmered with garlic and berbere',
+    ingredients: ['Chickpea Flour', 'Lentils', 'Berbere', 'Garlic', 'Onions', 'Injera']
+  },
+  {
+    id: 8, name: 'Misir Wat', price: 8.50, section: 'ethiopian', type: 'fasting',
+    desc: 'Red lentil stew cooked in spicy berbere sauce',
+    ingredients: ['Red Lentils', 'Berbere', 'Onions', 'Garlic', 'Ginger', 'Injera']
+  },
+  {
+    id: 9, name: 'Gomen', price: 8.00, section: 'ethiopian', type: 'fasting',
+    desc: 'Sautéed collard greens with garlic, ginger, and onions',
+    ingredients: ['Collard Greens', 'Garlic', 'Ginger', 'Onions', 'Olive Oil', 'Injera']
+  },
+  {
+    id: 10, name: 'Beyaynet', price: 12.00, section: 'ethiopian', type: 'fasting',
+    desc: 'Assorted vegetarian platter with shiro, misir, gomen, and more',
+    ingredients: ['Shiro', 'Misir', 'Gomen', 'Lentils', 'Vegetables', 'Injera']
+  },
+  {
+    id: 11, name: 'Pasta Besego', price: 10.00, section: 'ethiopian', type: 'fasting',
+    desc: 'Pasta tossed with seasoned minced meat sauce',
+    ingredients: ['Pasta', 'Minced Meat', 'Tomato Sauce', 'Onions', 'Spices']
+  },
+  {
+    id: 12, name: 'Pasta Batikelt', price: 9.00, section: 'ethiopian', type: 'fasting',
+    desc: 'Pasta with fresh sautéed vegetables in light tomato sauce',
+    ingredients: ['Pasta', 'Mixed Vegetables', 'Tomato Sauce', 'Garlic', 'Olive Oil']
+  },
+  {
+    id: 13, name: 'Denech Wat', price: 8.50, section: 'ethiopian', type: 'fasting',
+    desc: 'Hearty potato stew seasoned with turmeric and herbs',
+    ingredients: ['Potatoes', 'Turmeric', 'Onions', 'Garlic', 'Herbs', 'Injera']
+  },
+  {
+    id: 14, name: 'Ruz Besoya', price: 10.00, section: 'ethiopian', type: 'fasting',
+    desc: 'Rice with flavorful meat sauce and aromatic spices',
+    ingredients: ['Rice', 'Meat Sauce', 'Spices', 'Onions', 'Tomato']
+  },
+  {
+    id: 15, name: 'Tegabino', price: 9.50, section: 'ethiopian', type: 'fasting',
+    desc: 'Traditional thick bean and grain stew, rich and filling',
+    ingredients: ['Beans', 'Grains', 'Berbere', 'Onions', 'Garlic', 'Injera']
+  },
 
-  // ── International – Non-Fasting ──
-  // Burgers
-  { id: 16, name: 'Chicken Burger',          desc: 'Crispy chicken patty with lettuce, tomato, and mayo', price: 8.00, section: 'international', type: 'non-fasting', subsection: 'burgers' },
-  { id: 17, name: 'Beef Burger',             desc: 'Classic beef patty with lettuce, tomato, and onions', price: 8.50, section: 'international', type: 'non-fasting', subsection: 'burgers' },
-  { id: 18, name: 'Cheese Burger',           desc: 'Beef patty topped with melted cheddar cheese', price: 9.00, section: 'international', type: 'non-fasting', subsection: 'burgers' },
-  { id: 19, name: 'Double Cheese Burger',    desc: 'Two beef patties with double cheddar cheese', price: 11.00, section: 'international', type: 'non-fasting', subsection: 'burgers' },
-  { id: 20, name: "Yaya's Special Burger",   desc: 'Signature beef patty with caramelized onions, bacon, and special sauce', price: 12.00, section: 'international', type: 'non-fasting', subsection: 'burgers' },
-  { id: 21, name: "Yaya's Double Special",   desc: 'Double the patty, double the cheese – our ultimate burger', price: 15.00, section: 'international', type: 'non-fasting', subsection: 'burgers' },
+  // ══════════════════════════════════════════
+  // INTERNATIONAL – NON-FASTING
+  // ══════════════════════════════════════════
+  // ── Burgers ──
+  {
+    id: 16, name: 'Chicken Burger', price: 8.00, section: 'international', type: 'non-fasting', subsection: 'burgers',
+    desc: 'Crispy chicken patty with lettuce, tomato, and mayo',
+    ingredients: ['Chicken Patty', 'Lettuce', 'Tomato', 'Mayo', 'Burger Bun', 'Fries']
+  },
+  {
+    id: 17, name: 'Beef Burger', price: 8.50, section: 'international', type: 'non-fasting', subsection: 'burgers',
+    desc: 'Classic beef patty with lettuce, tomato, and onions',
+    ingredients: ['Beef Patty', 'Lettuce', 'Tomato', 'Onions', 'Burger Bun', 'Fries']
+  },
+  {
+    id: 18, name: 'Cheese Burger', price: 9.00, section: 'international', type: 'non-fasting', subsection: 'burgers',
+    desc: 'Beef patty topped with melted cheddar cheese',
+    ingredients: ['Beef Patty', 'Cheddar Cheese', 'Lettuce', 'Tomato', 'Burger Bun', 'Fries']
+  },
+  {
+    id: 19, name: 'Double Cheese Burger', price: 11.00, section: 'international', type: 'non-fasting', subsection: 'burgers',
+    desc: 'Two beef patties with double cheddar cheese',
+    ingredients: ['2x Beef Patties', 'Double Cheddar', 'Lettuce', 'Tomato', 'Burger Bun', 'Fries']
+  },
+  {
+    id: 20, name: "Yaya's Special Burger", price: 12.00, section: 'international', type: 'non-fasting', subsection: 'burgers',
+    desc: 'Signature beef patty with caramelized onions, bacon, and special sauce',
+    ingredients: ['Beef Patty', 'Bacon', 'Caramelized Onions', 'Special Sauce', 'Burger Bun', 'Fries']
+  },
+  {
+    id: 21, name: "Yaya's Double Special", price: 15.00, section: 'international', type: 'non-fasting', subsection: 'burgers',
+    desc: 'Double the patty, double the cheese – our ultimate burger',
+    ingredients: ['2x Beef Patties', 'Double Cheddar', 'Bacon', 'Special Sauce', 'Burger Bun', 'Fries']
+  },
 
-  // Pizzas
-  { id: 22, name: 'Margherita Pizza',        desc: 'Classic tomato sauce, mozzarella, and fresh basil', price: 9.00, section: 'international', type: 'non-fasting', subsection: 'pizzas' },
-  { id: 23, name: 'Chicken Pizza',           desc: 'Topped with grilled chicken, bell peppers, and mozzarella', price: 11.00, section: 'international', type: 'non-fasting', subsection: 'pizzas' },
-  { id: 24, name: 'Beef Pizza',              desc: 'Seasoned beef with onions, olives, and melted cheese', price: 11.00, section: 'international', type: 'non-fasting', subsection: 'pizzas' },
-  { id: 25, name: 'Tuna Pizza',              desc: 'Tuna, onions, olives, and mozzarella on crispy crust', price: 10.00, section: 'international', type: 'non-fasting', subsection: 'pizzas' },
-  { id: 26, name: "Yaya's Special Pizza",    desc: 'Our signature pizza loaded with chicken, beef, veggies, and extra cheese', price: 14.00, section: 'international', type: 'non-fasting', subsection: 'pizzas' },
+  // ── Pizzas ──
+  {
+    id: 22, name: 'Margherita Pizza', price: 9.00, section: 'international', type: 'non-fasting', subsection: 'pizzas',
+    desc: 'Classic tomato sauce, mozzarella, and fresh basil',
+    ingredients: ['Tomato Sauce', 'Mozzarella', 'Fresh Basil', 'Olive Oil', 'Pizza Dough']
+  },
+  {
+    id: 23, name: 'Chicken Pizza', price: 11.00, section: 'international', type: 'non-fasting', subsection: 'pizzas',
+    desc: 'Topped with grilled chicken, bell peppers, and mozzarella',
+    ingredients: ['Grilled Chicken', 'Bell Peppers', 'Mozzarella', 'Tomato Sauce', 'Pizza Dough']
+  },
+  {
+    id: 24, name: 'Beef Pizza', price: 11.00, section: 'international', type: 'non-fasting', subsection: 'pizzas',
+    desc: 'Seasoned beef with onions, olives, and melted cheese',
+    ingredients: ['Seasoned Beef', 'Onions', 'Olives', 'Mozzarella', 'Pizza Dough']
+  },
+  {
+    id: 25, name: 'Tuna Pizza', price: 10.00, section: 'international', type: 'non-fasting', subsection: 'pizzas',
+    desc: 'Tuna, onions, olives, and mozzarella on crispy crust',
+    ingredients: ['Tuna', 'Onions', 'Olives', 'Mozzarella', 'Tomato Sauce', 'Pizza Dough']
+  },
+  {
+    id: 26, name: "Yaya's Special Pizza", price: 14.00, section: 'international', type: 'non-fasting', subsection: 'pizzas',
+    desc: 'Our signature pizza loaded with chicken, beef, veggies, and extra cheese',
+    ingredients: ['Chicken', 'Beef', 'Mixed Veggies', 'Extra Cheese', 'Special Sauce', 'Pizza Dough']
+  },
 
-  // Chickens
-  { id: 27, name: 'Chicken Mofo',            desc: 'Crispy fried chicken pieces with spicy dipping sauce', price: 9.00, section: 'international', type: 'non-fasting', subsection: 'chickens' },
-  { id: 28, name: 'Grilled Chicken',         desc: 'Marinated chicken breast grilled to perfection, served with rice', price: 12.00, section: 'international', type: 'non-fasting', subsection: 'chickens' },
-  { id: 29, name: 'Chicken Wings',           desc: 'Crispy wings tossed in Yaya\'s signature hot sauce', price: 7.00, section: 'international', type: 'non-fasting', subsection: 'chickens' },
-  { id: 30, name: 'Chicken Rice',            desc: 'Tender chicken pieces stir-fried with seasoned rice and vegetables', price: 10.00, section: 'international', type: 'non-fasting', subsection: 'chickens' },
-  { id: 31, name: "Yaya's Special Combo",    desc: 'Grilled chicken, wings, fries, and coleslaw – the full experience', price: 16.00, section: 'international', type: 'non-fasting', subsection: 'chickens' },
+  // ── Chickens ──
+  {
+    id: 27, name: 'Chicken Mofo', price: 9.00, section: 'international', type: 'non-fasting', subsection: 'chickens',
+    desc: 'Crispy fried chicken pieces with spicy dipping sauce',
+    ingredients: ['Chicken Pieces', 'Flour Coating', 'Spices', 'Dipping Sauce', 'Fries']
+  },
+  {
+    id: 28, name: 'Grilled Chicken', price: 12.00, section: 'international', type: 'non-fasting', subsection: 'chickens',
+    desc: 'Marinated chicken breast grilled to perfection, served with rice',
+    ingredients: ['Chicken Breast', 'Herb Marinade', 'Rice', 'Grilled Vegetables']
+  },
+  {
+    id: 29, name: 'Chicken Wings', price: 7.00, section: 'international', type: 'non-fasting', subsection: 'chickens',
+    desc: 'Crispy wings tossed in Yaya\'s signature hot sauce',
+    ingredients: ['Chicken Wings', 'Hot Sauce', 'Butter', 'Blue Cheese Dip', 'Celery']
+  },
+  {
+    id: 30, name: 'Chicken Rice', price: 10.00, section: 'international', type: 'non-fasting', subsection: 'chickens',
+    desc: 'Tender chicken pieces stir-fried with seasoned rice and vegetables',
+    ingredients: ['Chicken', 'Rice', 'Mixed Vegetables', 'Soy Sauce', 'Spices']
+  },
+  {
+    id: 31, name: "Yaya's Special Combo", price: 16.00, section: 'international', type: 'non-fasting', subsection: 'chickens',
+    desc: 'Grilled chicken, wings, fries, and coleslaw – the full experience',
+    ingredients: ['Grilled Chicken', 'Chicken Wings', 'Fries', 'Coleslaw', 'Dipping Sauces']
+  },
 
-  // ── International – Fasting ──
-  { id: 32, name: 'Samosa',       desc: 'Crispy pastry filled with spiced potatoes and peas', price: 4.50, section: 'international', type: 'fasting' },
-  { id: 33, name: 'Spring Rolls', desc: 'Lightly fried rolls stuffed with vegetables and glass noodles', price: 5.00, section: 'international', type: 'fasting' },
-  { id: 34, name: 'Veggie Pizza', desc: 'Thin-crust pizza topped with fresh seasonal vegetables and mozzarella', price: 10.00, section: 'international', type: 'fasting' },
-  { id: 35, name: 'Fruit Salad',  desc: 'Fresh seasonal fruits drizzled with honey and lime', price: 4.50, section: 'international', type: 'fasting' },
+  // ══════════════════════════════════════════
+  // INTERNATIONAL – FASTING
+  // ══════════════════════════════════════════
+  {
+    id: 32, name: 'Samosa', price: 4.50, section: 'international', type: 'fasting',
+    desc: 'Crispy pastry filled with spiced potatoes and peas',
+    ingredients: ['Potatoes', 'Peas', 'Spices', 'Pastry Dough', 'Oil']
+  },
+  {
+    id: 33, name: 'Spring Rolls', price: 5.00, section: 'international', type: 'fasting',
+    desc: 'Lightly fried rolls stuffed with vegetables and glass noodles',
+    ingredients: ['Mixed Vegetables', 'Glass Noodles', 'Spring Roll Wrappers', 'Soy Sauce', 'Oil']
+  },
+  {
+    id: 34, name: 'Veggie Pizza', price: 10.00, section: 'international', type: 'fasting',
+    desc: 'Thin-crust pizza topped with fresh seasonal vegetables and mozzarella',
+    ingredients: ['Seasonal Vegetables', 'Mozzarella', 'Tomato Sauce', 'Pizza Dough']
+  },
+  {
+    id: 35, name: 'Fruit Salad', price: 4.50, section: 'international', type: 'fasting',
+    desc: 'Fresh seasonal fruits drizzled with honey and lime',
+    ingredients: ['Seasonal Fruits', 'Honey', 'Lime Juice', 'Mint']
+  },
 
-  // ── Hot Drinks ──
-  { id: 36, name: 'Macchiato',       desc: 'Espresso with a touch of steamed milk', price: 2.50, section: 'hot-drinks', type: null },
-  { id: 37, name: 'Ethiopian Coffee', desc: 'Traditional coffee ceremony style, rich and aromatic', price: 2.50, section: 'hot-drinks', type: null },
-  { id: 38, name: 'Spiced Tea',      desc: 'Aromatic black tea with cardamom, cinnamon, and cloves', price: 2.00, section: 'hot-drinks', type: null },
-  { id: 39, name: 'Tea',             desc: 'Premium black or herbal tea', price: 1.50, section: 'hot-drinks', type: null },
+  // ══════════════════════════════════════════
+  // HOT DRINKS
+  // ══════════════════════════════════════════
+  {
+    id: 36, name: 'Macchiato', price: 2.50, section: 'hot-drinks', type: null,
+    desc: 'Espresso with a touch of steamed milk',
+    ingredients: ['Espresso', 'Steamed Milk']
+  },
+  {
+    id: 37, name: 'Ethiopian Coffee', price: 2.50, section: 'hot-drinks', type: null,
+    desc: 'Traditional coffee ceremony style, rich and aromatic',
+    ingredients: ['Ethiopian Coffee Beans', 'Water', 'Sugar (optional)']
+  },
+  {
+    id: 38, name: 'Spiced Tea', price: 2.00, section: 'hot-drinks', type: null,
+    desc: 'Aromatic black tea with cardamom, cinnamon, and cloves',
+    ingredients: ['Black Tea', 'Cardamom', 'Cinnamon', 'Cloves', 'Honey']
+  },
+  {
+    id: 39, name: 'Tea', price: 1.50, section: 'hot-drinks', type: null,
+    desc: 'Premium black or herbal tea',
+    ingredients: ['Tea Leaves', 'Hot Water', 'Sugar (optional)']
+  },
 
-  // ── Cold Drinks ──
-  // Juices
-  { id: 40, name: 'Avocado Juice',    desc: 'Creamy fresh avocado blended with milk and sugar', price: 3.50, section: 'cold-drinks', type: null, subsection: 'juices' },
-  { id: 41, name: 'Mango Juice',      desc: 'Sweet ripe mango blended to perfection', price: 3.50, section: 'cold-drinks', type: null, subsection: 'juices' },
-  { id: 42, name: 'Pineapple Juice',  desc: 'Refreshing pineapple juice with a hint of lime', price: 3.00, section: 'cold-drinks', type: null, subsection: 'juices' },
-  { id: 43, name: 'Orange Juice',     desc: 'Freshly squeezed orange juice', price: 3.00, section: 'cold-drinks', type: null, subsection: 'juices' },
-  { id: 44, name: "Yaya's Special Juice", desc: 'Our signature blend of tropical fruits and berries', price: 4.50, section: 'cold-drinks', type: null, subsection: 'juices' },
+  // ══════════════════════════════════════════
+  // COLD DRINKS
+  // ══════════════════════════════════════════
+  // ── Juices ──
+  {
+    id: 40, name: 'Avocado Juice', price: 3.50, section: 'cold-drinks', type: null, subsection: 'juices',
+    desc: 'Creamy fresh avocado blended with milk and sugar',
+    ingredients: ['Avocado', 'Milk', 'Sugar', 'Vanilla']
+  },
+  {
+    id: 41, name: 'Mango Juice', price: 3.50, section: 'cold-drinks', type: null, subsection: 'juices',
+    desc: 'Sweet ripe mango blended to perfection',
+    ingredients: ['Ripe Mango', 'Milk', 'Sugar', 'Ice']
+  },
+  {
+    id: 42, name: 'Pineapple Juice', price: 3.00, section: 'cold-drinks', type: null, subsection: 'juices',
+    desc: 'Refreshing pineapple juice with a hint of lime',
+    ingredients: ['Pineapple', 'Lime', 'Sugar', 'Ice']
+  },
+  {
+    id: 43, name: 'Orange Juice', price: 3.00, section: 'cold-drinks', type: null, subsection: 'juices',
+    desc: 'Freshly squeezed orange juice',
+    ingredients: ['Fresh Oranges', 'Sugar (optional)', 'Ice']
+  },
+  {
+    id: 44, name: "Yaya's Special Juice", price: 4.50, section: 'cold-drinks', type: null, subsection: 'juices',
+    desc: 'Our signature blend of tropical fruits and berries',
+    ingredients: ['Tropical Fruits', 'Berries', 'Honey', 'Ice']
+  },
 
-  // Milkshakes
-  { id: 45, name: 'Strawberry Milkshake',  desc: 'Creamy strawberry milkshake topped with whipped cream', price: 4.50, section: 'cold-drinks', type: null, subsection: 'milkshakes' },
-  { id: 46, name: 'Chocolate Milkshake',   desc: 'Rich chocolate milkshake with a fudge swirl', price: 4.50, section: 'cold-drinks', type: null, subsection: 'milkshakes' },
-  { id: 47, name: 'Vanilla Milkshake',     desc: 'Classic vanilla milkshake made with real vanilla bean', price: 4.00, section: 'cold-drinks', type: null, subsection: 'milkshakes' },
-  { id: 48, name: 'Banana Milkshake',      desc: 'Smooth banana milkshake with a touch of cinnamon', price: 4.50, section: 'cold-drinks', type: null, subsection: 'milkshakes' },
-  { id: 49, name: 'Oreo Milkshake',        desc: 'Crushed Oreo cookies blended in creamy vanilla milkshake', price: 5.00, section: 'cold-drinks', type: null, subsection: 'milkshakes' },
-  { id: 50, name: "Yaya's Special Shake",  desc: 'Our signature mix of chocolate, caramel, and brownie bits', price: 5.50, section: 'cold-drinks', type: null, subsection: 'milkshakes' },
+  // ── Milkshakes ──
+  {
+    id: 45, name: 'Strawberry Milkshake', price: 4.50, section: 'cold-drinks', type: null, subsection: 'milkshakes',
+    desc: 'Creamy strawberry milkshake topped with whipped cream',
+    ingredients: ['Strawberries', 'Vanilla Ice Cream', 'Milk', 'Whipped Cream']
+  },
+  {
+    id: 46, name: 'Chocolate Milkshake', price: 4.50, section: 'cold-drinks', type: null, subsection: 'milkshakes',
+    desc: 'Rich chocolate milkshake with a fudge swirl',
+    ingredients: ['Chocolate Ice Cream', 'Milk', 'Chocolate Fudge', 'Whipped Cream']
+  },
+  {
+    id: 47, name: 'Vanilla Milkshake', price: 4.00, section: 'cold-drinks', type: null, subsection: 'milkshakes',
+    desc: 'Classic vanilla milkshake made with real vanilla bean',
+    ingredients: ['Vanilla Ice Cream', 'Milk', 'Vanilla Bean', 'Whipped Cream']
+  },
+  {
+    id: 48, name: 'Banana Milkshake', price: 4.50, section: 'cold-drinks', type: null, subsection: 'milkshakes',
+    desc: 'Smooth banana milkshake with a touch of cinnamon',
+    ingredients: ['Banana', 'Vanilla Ice Cream', 'Milk', 'Cinnamon', 'Whipped Cream']
+  },
+  {
+    id: 49, name: 'Oreo Milkshake', price: 5.00, section: 'cold-drinks', type: null, subsection: 'milkshakes',
+    desc: 'Crushed Oreo cookies blended in creamy vanilla milkshake',
+    ingredients: ['Oreo Cookies', 'Vanilla Ice Cream', 'Milk', 'Whipped Cream']
+  },
+  {
+    id: 50, name: "Yaya's Special Shake", price: 5.50, section: 'cold-drinks', type: null, subsection: 'milkshakes',
+    desc: 'Our signature mix of chocolate, caramel, and brownie bits',
+    ingredients: ['Chocolate', 'Caramel', 'Brownie Bits', 'Ice Cream', 'Milk', 'Whipped Cream']
+  },
 
-  // Smoothies
-  { id: 51, name: 'Mixed Berry Smoothie',  desc: 'Blend of strawberries, blueberries, and raspberries with yogurt', price: 4.50, section: 'cold-drinks', type: null, subsection: 'smoothies' },
-  { id: 52, name: 'Tropical Smoothie',     desc: 'Mango, pineapple, and coconut blended with yogurt', price: 4.50, section: 'cold-drinks', type: null, subsection: 'smoothies' },
-  { id: 53, name: 'Green Smoothie',        desc: 'Spinach, banana, apple, and ginger – healthy and refreshing', price: 4.00, section: 'cold-drinks', type: null, subsection: 'smoothies' },
-  { id: 54, name: 'Peanut Butter Smoothie', desc: 'Creamy peanut butter, banana, and chocolate protein blend', price: 5.00, section: 'cold-drinks', type: null, subsection: 'smoothies' },
-  { id: 55, name: 'Mango Smoothie',        desc: 'Fresh mango blended with yogurt and a hint of honey', price: 4.50, section: 'cold-drinks', type: null, subsection: 'smoothies' },
+  // ── Smoothies ──
+  {
+    id: 51, name: 'Mixed Berry Smoothie', price: 4.50, section: 'cold-drinks', type: null, subsection: 'smoothies',
+    desc: 'Blend of strawberries, blueberries, and raspberries with yogurt',
+    ingredients: ['Strawberries', 'Blueberries', 'Raspberries', 'Yogurt', 'Honey']
+  },
+  {
+    id: 52, name: 'Tropical Smoothie', price: 4.50, section: 'cold-drinks', type: null, subsection: 'smoothies',
+    desc: 'Mango, pineapple, and coconut blended with yogurt',
+    ingredients: ['Mango', 'Pineapple', 'Coconut Milk', 'Yogurt', 'Honey']
+  },
+  {
+    id: 53, name: 'Green Smoothie', price: 4.00, section: 'cold-drinks', type: null, subsection: 'smoothies',
+    desc: 'Spinach, banana, apple, and ginger – healthy and refreshing',
+    ingredients: ['Spinach', 'Banana', 'Apple', 'Ginger', 'Lime']
+  },
+  {
+    id: 54, name: 'Peanut Butter Smoothie', price: 5.00, section: 'cold-drinks', type: null, subsection: 'smoothies',
+    desc: 'Creamy peanut butter, banana, and chocolate protein blend',
+    ingredients: ['Peanut Butter', 'Banana', 'Chocolate Protein', 'Milk', 'Honey']
+  },
+  {
+    id: 55, name: 'Mango Smoothie', price: 4.50, section: 'cold-drinks', type: null, subsection: 'smoothies',
+    desc: 'Fresh mango blended with yogurt and a hint of honey',
+    ingredients: ['Mango', 'Yogurt', 'Honey', 'Ice']
+  },
 
-  // Soft Drinks
-  { id: 56, name: 'Soda',         desc: 'Choice of Coca-Cola, Sprite, Fanta, or Pepsi', price: 1.50, section: 'cold-drinks', type: null, subsection: 'soft-drinks' },
-  { id: 57, name: 'Bottled Water', desc: 'Pure, refreshing bottled water', price: 1.00, section: 'cold-drinks', type: null, subsection: 'soft-drinks' },
-  { id: 58, name: 'Energy Drink', desc: 'Choice of Red Bull or Monster', price: 3.00, section: 'cold-drinks', type: null, subsection: 'soft-drinks' },
-  { id: 59, name: 'Sparkling Water', desc: 'Refreshing carbonated mineral water', price: 1.50, section: 'cold-drinks', type: null, subsection: 'soft-drinks' }
+  // ── Mojitos ──
+  {
+    id: 56, name: 'Classic Mojito', price: 4.50, section: 'cold-drinks', type: null, subsection: 'mojitos',
+    desc: 'Traditional Cuban mojito with fresh mint and lime',
+    ingredients: ['White Rum', 'Fresh Mint', 'Lime', 'Sugar', 'Soda Water', 'Ice']
+  },
+  {
+    id: 57, name: 'Strawberry Mojito', price: 5.00, section: 'cold-drinks', type: null, subsection: 'mojitos',
+    desc: 'Sweet strawberry twist on the classic mojito',
+    ingredients: ['White Rum', 'Fresh Strawberries', 'Mint', 'Lime', 'Sugar', 'Soda Water', 'Ice']
+  },
+  {
+    id: 58, name: 'Mango Mojito', price: 5.00, section: 'cold-drinks', type: null, subsection: 'mojitos',
+    desc: 'Tropical mango purée meets refreshing mojito',
+    ingredients: ['White Rum', 'Mango Purée', 'Mint', 'Lime', 'Sugar', 'Soda Water', 'Ice']
+  },
+  {
+    id: 59, name: 'Passion Fruit Mojito', price: 5.50, section: 'cold-drinks', type: null, subsection: 'mojitos',
+    desc: 'Tangy passion fruit with cool mint and lime',
+    ingredients: ['White Rum', 'Passion Fruit', 'Mint', 'Lime', 'Sugar', 'Soda Water', 'Ice']
+  },
+  {
+    id: 60, name: 'Blueberry Mojito', price: 5.00, section: 'cold-drinks', type: null, subsection: 'mojitos',
+    desc: 'Muddled blueberries with classic mojito freshness',
+    ingredients: ['White Rum', 'Blueberries', 'Mint', 'Lime', 'Sugar', 'Soda Water', 'Ice']
+  },
+  {
+    id: 61, name: 'Watermelon Mojito', price: 5.00, section: 'cold-drinks', type: null, subsection: 'mojitos',
+    desc: 'Juicy watermelon blended into a refreshing mojito',
+    ingredients: ['White Rum', 'Watermelon Purée', 'Mint', 'Lime', 'Sugar', 'Soda Water', 'Ice']
+  },
+  {
+    id: 62, name: "Yaya's Special Mojito", price: 6.00, section: 'cold-drinks', type: null, subsection: 'mojitos',
+    desc: 'Our signature mojito with triple fruit blend and a secret twist',
+    ingredients: ['White Rum', 'Triple Fruit Blend', 'Mint', 'Lime', 'Secret Syrup', 'Soda Water', 'Ice']
+  },
+
+  // ── Soft Drinks ──
+  {
+    id: 63, name: 'Soda', price: 1.50, section: 'cold-drinks', type: null, subsection: 'soft-drinks',
+    desc: 'Choice of Coca-Cola, Sprite, Fanta, or Pepsi',
+    ingredients: ['Carbonated Water', 'Sugar', 'Flavoring']
+  },
+  {
+    id: 64, name: 'Bottled Water', price: 1.00, section: 'cold-drinks', type: null, subsection: 'soft-drinks',
+    desc: 'Pure, refreshing bottled water',
+    ingredients: ['Purified Water', 'Electrolytes']
+  },
+  {
+    id: 65, name: 'Energy Drink', price: 3.00, section: 'cold-drinks', type: null, subsection: 'soft-drinks',
+    desc: 'Choice of Red Bull or Monster',
+    ingredients: ['Caffeine', 'Taurine', 'B Vitamins', 'Carbonated Water', 'Sugar']
+  },
+  {
+    id: 66, name: 'Sparkling Water', price: 1.50, section: 'cold-drinks', type: null, subsection: 'soft-drinks',
+    desc: 'Refreshing carbonated mineral water',
+    ingredients: ['Carbonated Water', 'Natural Minerals']
+  }
 ];
 
 const sectionLabels = {
@@ -101,6 +386,7 @@ const subsectionLabels = {
   'juices': '🧃 Juices',
   'milkshakes': '🥤 Milkshakes',
   'smoothies': '🥭 Smoothies',
+  'mojitos': '🍸 Mojitos',
   'soft-drinks': '🥤 Soft Drinks'
 };
 
@@ -162,6 +448,9 @@ function renderItemsGrouped(items) {
 function renderItems(items) {
   return items.map(item => {
     const typeLabel = item.type ? `<span class="item-type ${item.type}">${item.type === 'fasting' ? 'ጾም' : 'ፆመ አፍታ'}</span>` : '';
+    const ingredients = item.ingredients.map(ing =>
+      `<span class="item-ingredient">${ing}</span>`
+    ).join('');
     return `
     <div class="menu-item">
       <div class="item-header">
@@ -171,6 +460,7 @@ function renderItems(items) {
         </span>
       </div>
       <p class="item-desc">${item.desc}</p>
+      <div class="item-ingredients">${ingredients}</div>
       ${typeLabel}
     </div>
   `}).join('');
@@ -212,3 +502,8 @@ if (typeof QRCode !== 'undefined') {
 } else {
   qrContainer.innerHTML = '<p style="color:#6b5a4a;">QR code will appear here once deployed.</p>';
 }
+
+setTimeout(() => {
+  const splash = document.getElementById('splash');
+  if (splash) splash.classList.add('splash-hidden');
+}, 3000);
