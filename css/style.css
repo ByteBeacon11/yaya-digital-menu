@@ -6,8 +6,8 @@
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: #fdf8f3;
-  color: #2c1810;
+  background: #fffaf0;
+  color: #3d2b1f;
   line-height: 1.6;
 }
 
@@ -18,8 +18,8 @@ body {
 }
 
 .header {
-  background: linear-gradient(135deg, #8b1a1a, #c0392b);
-  color: #fff;
+  background: linear-gradient(135deg, #f0a050, #ffb366);
+  color: #3d2b1f;
   text-align: center;
   padding: 40px 20px;
 }
@@ -54,7 +54,7 @@ body {
 }
 
 .cat-btn {
-  background: #f0e6dc;
+  background: #f5e6d3;
   border: none;
   padding: 10px 22px;
   border-radius: 25px;
@@ -67,11 +67,11 @@ body {
 }
 
 .cat-btn:hover {
-  background: #e0d0c0;
+  background: #ebd5be;
 }
 
 .cat-btn.active {
-  background: #8b1a1a;
+  background: #f0a050;
   color: #fff;
 }
 
@@ -116,9 +116,18 @@ body {
 .item-price {
   font-size: 1.15rem;
   font-weight: 700;
-  color: #8b1a1a;
+  color: #d4872a;
   white-space: nowrap;
   margin-left: 15px;
+}
+
+.item-price-etb {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #a0806a;
+  text-align: right;
+  margin-top: 2px;
 }
 
 .item-desc {
@@ -158,9 +167,9 @@ body {
 .qr-wrapper {
   display: inline-block;
   padding: 20px;
-  background: #fdf8f3;
+  background: #fffaf0;
   border-radius: 12px;
-  border: 2px dashed #c0392b;
+  border: 2px dashed #f0a050;
 }
 
 #qrCode img {
@@ -169,7 +178,7 @@ body {
 }
 
 .footer {
-  background: #2c1810;
+  background: #3d2b1f;
   color: #d4c4b4;
   text-align: center;
   padding: 20px;

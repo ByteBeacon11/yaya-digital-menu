@@ -99,6 +99,9 @@ const menuData = [
   }
 ];
 
+const ETB_RATE = 130;
+const formatETB = (usd) => (usd * ETB_RATE).toFixed(0);
+
 const menuGrid = document.getElementById('menuGrid');
 const categoryBtns = document.querySelectorAll('.cat-btn');
 
@@ -111,7 +114,9 @@ function renderMenu(category = 'all') {
     <div class="menu-item">
       <div class="item-header">
         <span class="item-name">${item.name}</span>
-        <span class="item-price">$${item.price.toFixed(2)}</span>
+        <span class="item-price">$${item.price.toFixed(2)}
+          <span class="item-price-etb">${formatETB(item.price)} ETB</span>
+        </span>
       </div>
       <p class="item-desc">${item.desc}</p>
       <span class="item-category">${item.category}</span>
