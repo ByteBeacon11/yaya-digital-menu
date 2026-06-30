@@ -57,10 +57,33 @@ const menuData = [
   { id: 39, name: 'Tea',             desc: 'Premium black or herbal tea', price: 1.50, section: 'hot-drinks', type: null },
 
   // ── Cold Drinks ──
-  { id: 40, name: 'Fresh Juice',  desc: 'Seasonal fresh fruit juice – mango, orange, or mix', price: 3.50, section: 'cold-drinks', type: null },
-  { id: 41, name: 'Smoothie',     desc: 'Creamy blended fruit smoothie with yogurt', price: 4.00, section: 'cold-drinks', type: null },
-  { id: 42, name: 'Soda',         desc: 'Choice of Coca-Cola, Sprite, Fanta, or Pepsi', price: 1.50, section: 'cold-drinks', type: null },
-  { id: 43, name: 'Bottled Water', desc: 'Pure, refreshing bottled water', price: 1.00, section: 'cold-drinks', type: null }
+  // Juices
+  { id: 40, name: 'Avocado Juice',    desc: 'Creamy fresh avocado blended with milk and sugar', price: 3.50, section: 'cold-drinks', type: null, subsection: 'juices' },
+  { id: 41, name: 'Mango Juice',      desc: 'Sweet ripe mango blended to perfection', price: 3.50, section: 'cold-drinks', type: null, subsection: 'juices' },
+  { id: 42, name: 'Pineapple Juice',  desc: 'Refreshing pineapple juice with a hint of lime', price: 3.00, section: 'cold-drinks', type: null, subsection: 'juices' },
+  { id: 43, name: 'Orange Juice',     desc: 'Freshly squeezed orange juice', price: 3.00, section: 'cold-drinks', type: null, subsection: 'juices' },
+  { id: 44, name: "Yaya's Special Juice", desc: 'Our signature blend of tropical fruits and berries', price: 4.50, section: 'cold-drinks', type: null, subsection: 'juices' },
+
+  // Milkshakes
+  { id: 45, name: 'Strawberry Milkshake',  desc: 'Creamy strawberry milkshake topped with whipped cream', price: 4.50, section: 'cold-drinks', type: null, subsection: 'milkshakes' },
+  { id: 46, name: 'Chocolate Milkshake',   desc: 'Rich chocolate milkshake with a fudge swirl', price: 4.50, section: 'cold-drinks', type: null, subsection: 'milkshakes' },
+  { id: 47, name: 'Vanilla Milkshake',     desc: 'Classic vanilla milkshake made with real vanilla bean', price: 4.00, section: 'cold-drinks', type: null, subsection: 'milkshakes' },
+  { id: 48, name: 'Banana Milkshake',      desc: 'Smooth banana milkshake with a touch of cinnamon', price: 4.50, section: 'cold-drinks', type: null, subsection: 'milkshakes' },
+  { id: 49, name: 'Oreo Milkshake',        desc: 'Crushed Oreo cookies blended in creamy vanilla milkshake', price: 5.00, section: 'cold-drinks', type: null, subsection: 'milkshakes' },
+  { id: 50, name: "Yaya's Special Shake",  desc: 'Our signature mix of chocolate, caramel, and brownie bits', price: 5.50, section: 'cold-drinks', type: null, subsection: 'milkshakes' },
+
+  // Smoothies
+  { id: 51, name: 'Mixed Berry Smoothie',  desc: 'Blend of strawberries, blueberries, and raspberries with yogurt', price: 4.50, section: 'cold-drinks', type: null, subsection: 'smoothies' },
+  { id: 52, name: 'Tropical Smoothie',     desc: 'Mango, pineapple, and coconut blended with yogurt', price: 4.50, section: 'cold-drinks', type: null, subsection: 'smoothies' },
+  { id: 53, name: 'Green Smoothie',        desc: 'Spinach, banana, apple, and ginger – healthy and refreshing', price: 4.00, section: 'cold-drinks', type: null, subsection: 'smoothies' },
+  { id: 54, name: 'Peanut Butter Smoothie', desc: 'Creamy peanut butter, banana, and chocolate protein blend', price: 5.00, section: 'cold-drinks', type: null, subsection: 'smoothies' },
+  { id: 55, name: 'Mango Smoothie',        desc: 'Fresh mango blended with yogurt and a hint of honey', price: 4.50, section: 'cold-drinks', type: null, subsection: 'smoothies' },
+
+  // Soft Drinks
+  { id: 56, name: 'Soda',         desc: 'Choice of Coca-Cola, Sprite, Fanta, or Pepsi', price: 1.50, section: 'cold-drinks', type: null, subsection: 'soft-drinks' },
+  { id: 57, name: 'Bottled Water', desc: 'Pure, refreshing bottled water', price: 1.00, section: 'cold-drinks', type: null, subsection: 'soft-drinks' },
+  { id: 58, name: 'Energy Drink', desc: 'Choice of Red Bull or Monster', price: 3.00, section: 'cold-drinks', type: null, subsection: 'soft-drinks' },
+  { id: 59, name: 'Sparkling Water', desc: 'Refreshing carbonated mineral water', price: 1.50, section: 'cold-drinks', type: null, subsection: 'soft-drinks' }
 ];
 
 const sectionLabels = {
@@ -74,7 +97,11 @@ const sectionLabels = {
 const subsectionLabels = {
   'burgers': '🍔 Burgers',
   'pizzas': '🍕 Pizzas',
-  'chickens': '🍗 Chickens'
+  'chickens': '🍗 Chickens',
+  'juices': '🧃 Juices',
+  'milkshakes': '🥤 Milkshakes',
+  'smoothies': '🥭 Smoothies',
+  'soft-drinks': '🥤 Soft Drinks'
 };
 
 const menuGrid = document.getElementById('menuGrid');
