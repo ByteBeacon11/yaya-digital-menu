@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yaya's Restaurant - Digital Menu</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <h1 class="restaurant-name">Yaya's Restaurant</h1>
+      <p class="tagline">Savor the Flavor, Feel the Love</p>
+    </div>
+  </header>
+
+  <nav class="category-nav">
+    <div class="container">
+      <button class="cat-btn active" data-category="all">All</button>
+      <button class="cat-btn" data-category="appetizers">Appetizers</button>
+      <button class="cat-btn" data-category="mains">Mains</button>
+      <button class="cat-btn" data-category="drinks">Drinks</button>
+      <button class="cat-btn" data-category="desserts">Desserts</button>
+    </div>
+  </nav>
+
+  <main class="container">
+    <section class="menu-section" id="menu">
+      <div class="menu-grid" id="menuGrid"></div>
+    </section>
+
+    <section class="qr-section">
+      <h2>Scan to Share</h2>
+      <p>Scan this QR code to view the menu on your phone</p>
+      <div class="qr-wrapper">
+        <div id="qrCode"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 Yaya's Restaurant. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>
