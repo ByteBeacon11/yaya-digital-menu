@@ -91,13 +91,7 @@
   <script>
     const url = window.location.href;
     document.getElementById('urlDisplay').textContent = url;
-    const qrContainer = document.getElementById('qrCode');
-    const img = document.createElement('img');
-    img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=' + encodeURIComponent(url);
-    img.alt = 'QR Code';
-    img.width = 220;
-    img.height = 220;
-    qrContainer.appendChild(img);
+    document.getElementById('qrCode').innerHTML = '<img src="https://chart.googleapis.com/chart?chs=240x240&cht=qr&chl=' + encodeURIComponent(url) + '" alt="QR Code" width="220" height="220" style="display:block;margin:0 auto;">';
   </script>
 </body>
 </html>

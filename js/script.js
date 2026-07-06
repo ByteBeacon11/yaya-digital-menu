@@ -619,13 +619,7 @@ subBtns.forEach(btn => {
 function initQR() {
   const currentUrl = window.location.href;
   const qrContainer = document.getElementById('qrCode');
-  const img = document.createElement('img');
-  img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(currentUrl);
-  img.alt = 'QR Code - Scan to view Yaya\'s House menu';
-  img.width = 180;
-  img.height = 180;
-  img.loading = 'eager';
-  qrContainer.appendChild(img);
+  qrContainer.innerHTML = '<img src="https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=' + encodeURIComponent(currentUrl) + '" alt="QR Code - Scan to view Yaya\'s House menu" width="180" height="180" style="display:block;margin:0 auto;">';
 }
 
 (async () => {
