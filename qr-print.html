@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scan QR - Yaya's House</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #fffaf0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .qr-print {
+      text-align: center;
+      padding: 40px;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      max-width: 500px;
+      width: 100%;
+    }
+    .qr-print h1 {
+      font-size: 2rem;
+      color: #3d2b1f;
+      margin-bottom: 4px;
+    }
+    .qr-print .sub {
+      font-size: 1rem;
+      color: #6b5a4a;
+      font-style: italic;
+      margin-bottom: 20px;
+    }
+    .qr-print .qr-wrapper {
+      display: inline-block;
+      padding: 20px;
+      background: #fffaf0;
+      border-radius: 12px;
+      border: 3px dashed #f0a050;
+      margin-bottom: 15px;
+    }
+    .qr-print .url-text {
+      font-size: 0.9rem;
+      color: #8a7a6a;
+      word-break: break-all;
+      margin-top: 10px;
+    }
+    .qr-print .instructions {
+      font-size: 0.85rem;
+      color: #a0806a;
+      margin-top: 15px;
+      padding: 10px;
+      background: #f5ede4;
+      border-radius: 8px;
+    }
+    .qr-print .location {
+      font-size: 0.9rem;
+      color: #5a3a2a;
+      margin-top: 12px;
+    }
+    @media print {
+      body { background: #fff; padding: 0; }
+      .qr-print { box-shadow: none; border-radius: 0; padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="qr-print">
+    <h1>Yaya's House</h1>
+    <p class="sub">Savor the Flavor, Feel the Love</p>
+    <p class="location">📍 Addis Ababa, Bole-Atlas &nbsp;|&nbsp; 📞 +251 911 123 00321</p>
+    <p class="location">📧 yayashouse@gmail.com</p>
+
+    <p style="margin: 20px 0 10px; font-weight: 600; color: #3d2b1f;">Scan to view our full menu</p>
+
+    <div class="qr-wrapper">
+      <div id="qrCode"></div>
+    </div>
+
+    <p class="url-text" id="urlDisplay">Loading...</p>
+
+    <div class="instructions">
+      📱 Point your camera at the QR code to browse our menu
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <script>
+    const url = window.location.href;
+    document.getElementById('urlDisplay').textContent = url;
+    new QRCode(document.getElementById('qrCode'), {
+      text: url,
+      width: 220,
+      height: 220
+    });
+  </script>
+</body>
+</html>
