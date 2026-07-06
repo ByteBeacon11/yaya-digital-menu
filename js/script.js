@@ -619,11 +619,13 @@ subBtns.forEach(btn => {
 function initQR() {
   const currentUrl = window.location.href;
   const qrContainer = document.getElementById('qrCode');
-  if (typeof QRCode !== 'undefined') {
-    new QRCode(qrContainer, { text: currentUrl, width: 180, height: 180 });
-  } else {
-    qrContainer.innerHTML = '<p style="color:#6b5a4a;">QR code will appear here once deployed.</p>';
-  }
+  const img = document.createElement('img');
+  img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(currentUrl);
+  img.alt = 'QR Code - Scan to view Yaya\'s House menu';
+  img.width = 180;
+  img.height = 180;
+  img.loading = 'eager';
+  qrContainer.appendChild(img);
 }
 
 (async () => {

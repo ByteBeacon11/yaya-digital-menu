@@ -88,15 +88,16 @@
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
   <script>
     const url = window.location.href;
     document.getElementById('urlDisplay').textContent = url;
-    new QRCode(document.getElementById('qrCode'), {
-      text: url,
-      width: 220,
-      height: 220
-    });
+    const qrContainer = document.getElementById('qrCode');
+    const img = document.createElement('img');
+    img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=' + encodeURIComponent(url);
+    img.alt = 'QR Code';
+    img.width = 220;
+    img.height = 220;
+    qrContainer.appendChild(img);
   </script>
 </body>
 </html>
