@@ -1212,7 +1212,7 @@ itemForm.addEventListener('submit', async (e) => {
     section: itemSection.value, type: itemType.value || null,
     subsection: itemSubsection.value || undefined,
     desc: itemDesc.value.trim(), ingredients,
-    active: existingItem ? existingItem.active : true
+    active: existingItem ? existingItem.active !== false : true
   };
   if (item.subsection === undefined) delete item.subsection;
 

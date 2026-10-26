@@ -149,7 +149,11 @@ async function fbSaveCollection(collectionName, items) {
 
     items.forEach(item => {
       const d = doc(colRef, String(item.id));
-      const { _id, ...payload } = item;
+      const { _id, ...rest } = item;
+      const payload = {};
+      Object.entries(rest).forEach(([key, value]) => {
+        if (value !== undefined) payload[key] = value;
+      });
       batch.set(d, payload);
     });
 
@@ -189,7 +193,11 @@ async function fbSaveDoc(collectionName, id, data) {
   }
   try {
     const { collection, doc, setDoc } = window._firebaseFirestore;
-    const { _id, ...payload } = data || {};
+    const { _id, ...rest } = data || {};
+    const payload = {};
+    Object.entries(rest).forEach(([key, value]) => {
+      if (value !== undefined) payload[key] = value;
+    });
     await setDoc(doc(collection(firestoreDb, collectionName), String(id)), payload);
     return true;
   } catch (e) {
