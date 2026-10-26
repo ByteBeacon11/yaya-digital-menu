@@ -345,6 +345,10 @@
                 <button type="button" id="itemImagePick" class="admin-btn admin-btn-outline admin-btn-sm">Choose Image</button>
                 <button type="button" id="itemImageRemove" class="admin-btn admin-btn-danger admin-btn-sm" style="display:none;">Remove</button>
                 <p class="admin-image-hint">JPG, PNG, WebP or GIF. Resized automatically and shown behind this item on the live menu.</p>
+                <div class="admin-image-url">
+                  <input type="url" id="itemImageUrl" placeholder="Or paste a direct image link: https://..." autocomplete="off" spellcheck="false">
+                  <button type="button" id="itemImageUseUrl" class="admin-btn admin-btn-outline admin-btn-sm">Use Link</button>
+                </div>
                 <label class="admin-image-focus" id="itemImagePositionWrap" for="itemImagePosition" style="display:none;">
                   <span>Image focus</span>
                   <select id="itemImagePosition">

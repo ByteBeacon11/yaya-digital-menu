@@ -598,13 +598,24 @@ async function loadItemImageData(id) {
   }
 }
 
+function paintCardImage(card, data, position) {
+  card.style.backgroundImage = `url("${data}")`;
+  card.style.backgroundPosition = position;
+  card.classList.remove('image-pending');
+  card.classList.add('image-loaded');
+}
+
+function clearCardImage(card) {
+  card.classList.remove('has-image', 'image-pending', 'image-loaded');
+  card.style.backgroundImage = '';
+}
+
 async function hydrateCardImage(card) {
   const id = Number(card.dataset.imageId);
   const data = await loadItemImageData(id);
 
   if (!data) {
-    card.classList.remove('has-image', 'image-pending');
-    card.style.backgroundImage = '';
+    clearCardImage(card);
     return;
   }
 
@@ -612,10 +623,17 @@ async function hydrateCardImage(card) {
     ? card.dataset.imagePosition
     : 'center';
 
-  card.style.backgroundImage = `url("${data}")`;
-  card.style.backgroundPosition = position;
-  card.classList.remove('image-pending');
-  card.classList.add('image-loaded');
+  // Linked images load from another website. Wait for them to arrive so the
+  // shimmer stays visible, and fall back to a plain card if the link is dead.
+  if (/^https?:\/\//i.test(data)) {
+    const probe = new Image();
+    probe.onload = () => paintCardImage(card, data, position);
+    probe.onerror = () => clearCardImage(card);
+    probe.src = data;
+    return;
+  }
+
+  paintCardImage(card, data, position);
 }
 
 function applyItemImages() {

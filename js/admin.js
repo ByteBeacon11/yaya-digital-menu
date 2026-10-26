@@ -212,6 +212,8 @@ const categoryStatusGrid = document.getElementById('categoryStatusGrid');
 const itemImageFile = document.getElementById('itemImageFile');
 const itemImagePick = document.getElementById('itemImagePick');
 const itemImageRemove = document.getElementById('itemImageRemove');
+const itemImageUrl = document.getElementById('itemImageUrl');
+const itemImageUseUrl = document.getElementById('itemImageUseUrl');
 const itemImagePreview = document.getElementById('itemImagePreview');
 const itemImagePlaceholder = document.getElementById('itemImagePlaceholder');
 const itemImageStatus = document.getElementById('itemImageStatus');
@@ -724,6 +726,79 @@ function formatBytes(bytes) {
   return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
 }
 
+function isRemoteImageUrl(value) {
+  return typeof value === 'string' && /^https?:\/\//i.test(value);
+}
+
+function normalizeImageUrl(raw) {
+  const value = String(raw || '').trim();
+  if (!value) throw new Error('Paste an image link first.');
+  let parsed;
+  try {
+    parsed = new URL(value);
+  } catch (e) {
+    throw new Error('That does not look like a valid image link.');
+  }
+  if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+    throw new Error('Only http:// and https:// image links are supported.');
+  }
+  if (parsed.protocol === 'http:' && window.location.protocol === 'https:') {
+    throw new Error('Use an https:// link, because browsers block http images on a secure site.');
+  }
+  return parsed.href;
+}
+
+function loadRemoteImage(url, timeoutMs = 12000) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const timer = setTimeout(() => {
+      img.onload = null;
+      img.onerror = null;
+      img.src = '';
+      reject(new Error('That image link took too long to load.'));
+    }, timeoutMs);
+    img.onload = () => {
+      clearTimeout(timer);
+      resolve(img);
+    };
+    img.onerror = () => {
+      clearTimeout(timer);
+      reject(new Error('Could not load an image from that link. Use a direct image URL (for example one ending in .jpg, .png or .webp).'));
+    };
+    img.src = url;
+  });
+}
+
+async function fetchImageFile(url, timeoutMs = 12000) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const res = await fetch(url, { mode: 'cors', signal: controller.signal });
+    if (!res.ok) throw new Error('fetch failed');
+    const blob = await res.blob();
+    if (!blob.type || !blob.type.startsWith('image/')) throw new Error('not an image');
+    if (blob.size > 25 * 1024 * 1024) throw new Error('image too large');
+    return new File([blob], 'linked-image', { type: blob.type });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+async function importImageFromUrl(url) {
+  // If the website allows cross-origin reads, download and compress the
+  // image so it is fast and remains available even if the site changes.
+  try {
+    const file = await fetchImageFile(url);
+    const dataUrl = await compressImageForMenu(file);
+    return { data: dataUrl, source: 'download' };
+  } catch (e) {
+    // Many sites block cross-origin reads. Confirm the browser can display
+    // the link and store the URL directly instead.
+  }
+  await loadRemoteImage(url);
+  return { data: url, source: 'url' };
+}
+
 async function compressImageForMenu(file) {
   if (!file.type || !file.type.startsWith('image/')) {
     throw new Error('Please choose an image file (JPG, PNG, WebP or GIF).');
@@ -787,12 +862,59 @@ function renderImagePreview() {
   }
 }
 
+function syncImageUrlField() {
+  if (!itemImageUrl) return;
+  itemImageUrl.value = isRemoteImageUrl(pendingImageData) ? pendingImageData : '';
+}
+
+async function handleImageUrl() {
+  itemFormError.textContent = '';
+  let url;
+  try {
+    url = normalizeImageUrl(itemImageUrl.value);
+  } catch (err) {
+    setImageStatus(err.message, 'error');
+    itemImageUrl.focus();
+    return;
+  }
+
+  setImageStatus('Checking image link…');
+  imageProcessing = true;
+  itemImageUseUrl.disabled = true;
+  itemImagePick.disabled = true;
+  saveItemBtn.disabled = true;
+
+  try {
+    const result = await importImageFromUrl(url);
+    pendingImageData = result.data;
+    pendingImageDirty = true;
+    editingHasImage = true;
+    renderImagePreview();
+
+    if (result.source === 'url') {
+      syncImageUrlField();
+      setImageStatus('Image link added. The menu will load it from that website.', 'success');
+    } else {
+      itemImageUrl.value = '';
+      setImageStatus(`Downloaded and resized · ${formatBytes(dataUrlBytes(result.data))} · saved with the item`, 'success');
+    }
+  } catch (err) {
+    setImageStatus(err.message, 'error');
+  } finally {
+    imageProcessing = false;
+    itemImageUseUrl.disabled = false;
+    itemImagePick.disabled = false;
+    saveItemBtn.disabled = false;
+  }
+}
+
 async function handleImageFile(file) {
   if (!file) return;
   itemFormError.textContent = '';
   setImageStatus('Processing image…');
   imageProcessing = true;
   itemImagePick.disabled = true;
+  itemImageUseUrl.disabled = true;
   saveItemBtn.disabled = true;
 
   try {
@@ -800,6 +922,7 @@ async function handleImageFile(file) {
     pendingImageData = dataUrl;
     pendingImageDirty = true;
     editingHasImage = true;
+    if (itemImageUrl) itemImageUrl.value = '';
     renderImagePreview();
     setImageStatus(`Ready · ${formatBytes(dataUrlBytes(dataUrl))} · saved with the item`, 'success');
   } catch (err) {
@@ -807,6 +930,7 @@ async function handleImageFile(file) {
   } finally {
     imageProcessing = false;
     itemImagePick.disabled = false;
+    itemImageUseUrl.disabled = false;
     saveItemBtn.disabled = false;
     itemImageFile.value = '';
   }
@@ -976,6 +1100,7 @@ function openAddModal() {
   editingHasImage = false;
   imageLoadToken++;
   itemImagePosition.value = 'center';
+  syncImageUrlField();
   renderImagePreview();
   setImageStatus('');
   itemFormError.textContent = '';
@@ -999,6 +1124,7 @@ function openEditModal(id) {
   pendingImageData = item.image || null;
   pendingImageDirty = false;
   editingHasImage = !!(item.hasImage || item.image);
+  syncImageUrlField();
   renderImagePreview();
   setImageStatus(editingHasImage && !pendingImageData ? 'Loading image…' : '');
   itemFormError.textContent = '';
@@ -1010,6 +1136,7 @@ function openEditModal(id) {
       if (token !== imageLoadToken || editId.value !== String(id)) return;
       if (data) {
         pendingImageData = data;
+        syncImageUrlField();
         setImageStatus('Current image', 'success');
       } else {
         setImageStatus('Image could not be loaded. You can choose a new one.', 'error');
@@ -1024,11 +1151,21 @@ function openEditModal(id) {
 itemImagePick.addEventListener('click', () => itemImageFile.click());
 itemImagePreview.addEventListener('click', () => itemImageFile.click());
 itemImageFile.addEventListener('change', () => handleImageFile(itemImageFile.files[0]));
+if (itemImageUseUrl && itemImageUrl) {
+  itemImageUseUrl.addEventListener('click', handleImageUrl);
+  itemImageUrl.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleImageUrl();
+    }
+  });
+}
 
 itemImageRemove.addEventListener('click', () => {
   pendingImageData = null;
   pendingImageDirty = true;
   editingHasImage = false;
+  syncImageUrlField();
   renderImagePreview();
   setImageStatus('Image will be removed when you save.', '');
 });
