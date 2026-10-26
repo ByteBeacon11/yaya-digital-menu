@@ -89,9 +89,30 @@
   </div>
 
   <script>
-    const url = window.location.href;
+    const url = window.location.href.startsWith('file://') ? 'https://yayas-house-menu.web.app/' : window.location.href;
     document.getElementById('urlDisplay').textContent = url;
-    document.getElementById('qrCode').innerHTML = '<img src="https://chart.googleapis.com/chart?chs=240x240&cht=qr&chl=' + encodeURIComponent(url) + '" alt="QR Code" width="220" height="220" style="display:block;margin:0 auto;">';
+    const qrContainer = document.getElementById('qrCode');
+    const img = new Image();
+    const apis = [
+      'https://chart.googleapis.com/chart?chs=240x240&cht=qr&chl=',
+      'https://api.qrserver.com/v1/create-qr-code/?size=240x240&data='
+    ];
+    let apiIdx = 0;
+    function tryApi() {
+      if (apiIdx >= apis.length) {
+        qrContainer.innerHTML = '<p style="color:#6b5a4a;">Open <a href="' + url + '" style="color:#f0a050;">' + url + '</a> on your phone</p>';
+        return;
+      }
+      img.src = apis[apiIdx] + encodeURIComponent(url);
+      apiIdx++;
+    }
+    img.onload = function() { qrContainer.innerHTML = ''; qrContainer.appendChild(img); };
+    img.onerror = tryApi;
+    img.alt = 'QR Code - Scan to view Yayas House menu';
+    img.width = 220;
+    img.height = 220;
+    img.style.cssText = 'display:block;margin:0 auto;';
+    tryApi();
   </script>
 </body>
 </html>
