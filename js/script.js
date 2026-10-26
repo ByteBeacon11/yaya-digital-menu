@@ -445,22 +445,43 @@ const subBtns = document.querySelectorAll('.sub-btn');
 
 let currentSection = 'all';
 let currentType = 'all';
+let searchTerm = '';
 let ratingsCache = {};
 
+function matchesSearch(item, tokens) {
+  const haystack = [
+    item.name,
+    item.desc,
+    (item.ingredients || []).join(' '),
+    sectionLabels[item.section] || '',
+    subsectionLabels[item.subsection] || ''
+  ].join(' ').toLowerCase();
+  return tokens.every(token => haystack.includes(token));
+}
+
 function renderMenu() {
+  const term = searchTerm.trim().toLowerCase();
+  const searching = term.length > 0;
+  const tokens = searching ? term.split(/\s+/).filter(Boolean) : [];
+
   let items = menuData.filter(item => item.active !== false);
 
-  if (currentSection !== 'all') {
-    items = items.filter(item => item.section === currentSection);
-  }
+  if (searching) {
+    items = items.filter(item => matchesSearch(item, tokens));
+  } else {
+    if (currentSection !== 'all') {
+      items = items.filter(item => item.section === currentSection);
+    }
 
-  if (currentType !== 'all') {
-    items = items.filter(item => item.type === currentType);
+    if (currentType !== 'all') {
+      items = items.filter(item => item.type === currentType);
+    }
   }
 
   items.sort((a, b) => getAvgRating(b.id) - getAvgRating(a.id));
 
-  const showSectionHeaders = currentSection === 'all';
+  // Search always looks across the full menu and groups results by section.
+  const showSectionHeaders = searching || currentSection === 'all';
   const hasSubsections = items.some(item => item.subsection);
 
   let html = '';
@@ -480,11 +501,14 @@ function renderMenu() {
   }
 
   if (!html) {
-    html = '<div class="menu-empty">No items available in this category.</div>';
+    html = searching
+      ? `<div class="menu-empty">No dishes or drinks match “${escAttr(searchTerm.trim())}”.</div>`
+      : '<div class="menu-empty">No items available in this category.</div>';
   }
 
   menuGrid.innerHTML = html;
   applyItemImages();
+  updateSearchSummary(items.length);
 }
 
 function renderItemsGrouped(items) {
@@ -582,6 +606,23 @@ function escAttr(str) {
     .replace(/>/g, '&gt;');
 }
 
+/* Wraps the matched search words so results stand out in the menu cards. */
+function markMatches(text) {
+  const value = String(text == null ? '' : text);
+  const term = searchTerm.trim();
+  if (!term) return value;
+
+  const pattern = term
+    .split(/\s+/)
+    .filter(Boolean)
+    .map(token => token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+    .join('|');
+
+  if (!pattern) return value;
+
+  return value.replace(new RegExp(`(${pattern})`, 'gi'), '<mark class="search-hit">$1</mark>');
+}
+
 async function loadItemImageData(id) {
   if (itemImageCache.has(id)) return itemImageCache.get(id);
   if (typeof fbGetItemImage === 'undefined' ||
@@ -661,7 +702,7 @@ function renderItems(items) {
   return items.map(item => {
     const typeLabel = item.type ? `<span class="item-type ${item.type}">${item.type === 'fasting' ? 'ጾም' : 'የፍስክ'}</span>` : '';
     const ingredients = item.ingredients.map(ing =>
-      `<span class="item-ingredient">${ing}</span>`
+      `<span class="item-ingredient">${markMatches(ing)}</span>`
     ).join('');
 
     const hasImage = !!(item.hasImage || item.image);
@@ -678,10 +719,10 @@ function renderItems(items) {
     return `
     <div class="menu-item${imageClass}"${imageAttrs}${imageStyle}>
       <div class="item-header">
-        <span class="item-name">${item.name}</span>
+        <span class="item-name">${markMatches(item.name)}</span>
         <span class="item-price">${item.price} ETB</span>
       </div>
-      <p class="item-desc">${item.desc}</p>
+      <p class="item-desc">${markMatches(item.desc)}</p>
       <div class="item-ingredients">${ingredients}</div>
       <div class="item-footer">
         ${typeLabel}
@@ -703,6 +744,8 @@ menuGrid.addEventListener('click', (e) => {
 
 catBtns.forEach(btn => {
   btn.addEventListener('click', () => {
+    // Choosing a category leaves search mode so the filter actually applies.
+    resetSearchState();
     catBtns.forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     currentSection = btn.dataset.section;
@@ -716,11 +759,103 @@ catBtns.forEach(btn => {
 
 subBtns.forEach(btn => {
   btn.addEventListener('click', () => {
+    resetSearchState();
     subBtns.forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     currentType = btn.dataset.type;
     renderMenu();
   });
+});
+
+/* ─── MENU SEARCH ─── */
+const headerSearchBtn = document.getElementById('headerSearchBtn');
+const headerSearch = document.getElementById('headerSearch');
+const menuSearchInput = document.getElementById('menuSearchInput');
+const menuSearchClear = document.getElementById('menuSearchClear');
+const searchSummary = document.getElementById('searchSummary');
+let searchOpen = false;
+
+/* Clears the active search but leaves the search field open. */
+function resetSearchState() {
+  if (!searchTerm) return;
+  searchTerm = '';
+  if (menuSearchInput) menuSearchInput.value = '';
+  if (menuSearchClear) menuSearchClear.hidden = true;
+  updateSearchSummary(0);
+}
+
+function updateSearchSummary(count) {
+  if (!searchSummary) return;
+  const term = searchTerm.trim();
+
+  if (!term) {
+    searchSummary.textContent = '';
+    searchSummary.classList.remove('empty');
+    return;
+  }
+
+  const isOne = count === 1;
+  searchSummary.textContent = count === 0
+    ? `No dishes or drinks match “${term}”.`
+    : `${count} ${isOne ? 'item' : 'items'} found for “${term}”.`;
+  searchSummary.classList.toggle('empty', count === 0);
+}
+
+function openSearch() {
+  if (!headerSearch) return;
+  searchOpen = true;
+  headerSearch.hidden = false;
+  headerSearchBtn.classList.add('active');
+  headerSearchBtn.setAttribute('aria-expanded', 'true');
+  if (!menuSearchInput.value) menuSearchClear.hidden = true;
+  menuSearchInput.focus();
+}
+
+function closeSearch() {
+  if (!headerSearch) return;
+  searchOpen = false;
+  headerSearch.hidden = true;
+  headerSearchBtn.classList.remove('active');
+  headerSearchBtn.setAttribute('aria-expanded', 'false');
+  menuSearchClear.hidden = true;
+  menuSearchInput.value = '';
+  searchTerm = '';
+  renderMenu();
+  headerSearchBtn.focus();
+}
+
+headerSearchBtn.addEventListener('click', () => {
+  if (searchOpen) closeSearch();
+  else openSearch();
+});
+
+menuSearchInput.addEventListener('input', () => {
+  searchTerm = menuSearchInput.value;
+  menuSearchClear.hidden = !searchTerm;
+  renderMenu();
+});
+
+menuSearchClear.addEventListener('click', () => {
+  menuSearchInput.value = '';
+  searchTerm = '';
+  menuSearchClear.hidden = true;
+  renderMenu();
+  menuSearchInput.focus();
+});
+
+document.addEventListener('keydown', (e) => {
+  const tag = document.activeElement ? document.activeElement.tagName : '';
+  const typing = tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT';
+
+  if ((e.key === 'k' || e.key === 'K') && (e.ctrlKey || e.metaKey)) {
+    e.preventDefault();
+    openSearch();
+  } else if (e.key === '/' && !typing) {
+    e.preventDefault();
+    openSearch();
+  } else if (e.key === 'Escape' && searchOpen) {
+    closeSearch();
+  }
 });
 
 function initQR() {
@@ -729,8 +864,8 @@ function initQR() {
   if (!qrContainer) return;
   const img = new Image();
   const apis = [
-    'https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=',
-    'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data='
+    'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=',
+    'https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl='
   ];
   let apiIdx = 0;
   function tryApi() {
@@ -750,6 +885,165 @@ function initQR() {
   tryApi();
 }
 
+/* ─── RESTAURANT DETAILS (editable from the admin panel) ─── */
+const RESTAURANT_CACHE_KEY = 'yayaRestaurantInfo';
+
+const restaurantDefaults = {
+  name: "Yaya's House",
+  tagline: 'Savor the Flavor, Feel the Love',
+  location: 'Addis Ababa, Bole-Atlas',
+  phone: '+251 911 123 00321',
+  email: 'yayashouse@gmail.com',
+  mapUrl: '',
+  hours: '',
+  instagram: '',
+  facebook: '',
+  telegram: ''
+};
+
+const SOCIAL_DEFS = [
+  {
+    key: 'instagram',
+    label: 'Instagram',
+    base: 'https://instagram.com/',
+    icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.2" cy="6.8" r="0.6" fill="currentColor" stroke="none"></circle></svg>'
+  },
+  {
+    key: 'facebook',
+    label: 'Facebook',
+    base: 'https://facebook.com/',
+    icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 21v-7h2.6l.4-3h-3V9.2c0-.9.3-1.5 1.5-1.5h1.6V5.1c-.3 0-1.2-.1-2.3-.1-2.3 0-3.8 1.4-3.8 3.9V11H9v3h2.5v7z"></path></svg>'
+  },
+  {
+    key: 'telegram',
+    label: 'Telegram',
+    base: 'https://t.me/',
+    icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 4.5-3.2 15c-.2 1-.9 1.3-1.7.8l-4.6-3.4-2.2 2.1c-.2.2-.4.4-.9.4l.3-4.7 8.5-7.7c.4-.3-.1-.5-.6-.2L6.8 12.5 2.2 11c-1-.3-1-1 .2-1.5l17.2-6.6c.8-.3 1.6.2 1.4 1.6z"></path></svg>'
+  }
+];
+
+function socialHref(value, base) {
+  const raw = String(value || '').trim();
+  if (!raw) return '';
+  if (/^https?:\/\//i.test(raw)) return raw;
+  return base + raw.replace(/^@+/, '').replace(/^\/+/, '');
+}
+
+function isSafeHttpUrl(value) {
+  try {
+    const url = new URL(value);
+    return url.protocol === 'http:' || url.protocol === 'https:';
+  } catch (e) {
+    return false;
+  }
+}
+
+function applyRestaurantInfo(raw) {
+  const info = Object.assign({}, restaurantDefaults, raw || {});
+
+  const name = String(info.name || '').trim() || restaurantDefaults.name;
+  document.getElementById('restaurantName').textContent = name;
+  document.getElementById('footerRestaurantName').textContent = name;
+  document.title = name + ' - Digital Menu';
+
+  const splashName = document.querySelector('.splash-name');
+  if (splashName) splashName.textContent = name;
+
+  const tagline = String(info.tagline || '').trim();
+  const taglineEl = document.getElementById('restaurantTagline');
+  taglineEl.textContent = tagline;
+  taglineEl.hidden = !tagline;
+
+  let visibleContacts = 0;
+
+  const location = String(info.location || '').trim();
+  const locationLink = document.getElementById('restaurantLocationLink');
+  document.getElementById('restaurantLocation').textContent = location;
+  if (location) {
+    const customMap = String(info.mapUrl || '').trim();
+    locationLink.href = isSafeHttpUrl(customMap)
+      ? customMap
+      : 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(location);
+    locationLink.target = '_blank';
+    locationLink.rel = 'noopener';
+    locationLink.hidden = false;
+    visibleContacts++;
+  } else {
+    locationLink.hidden = true;
+  }
+
+  const phone = String(info.phone || '').trim();
+  const phoneLink = document.getElementById('restaurantPhoneLink');
+  document.getElementById('restaurantPhone').textContent = phone;
+  if (phone) {
+    phoneLink.href = 'tel:' + phone.replace(/[^\d+]/g, '');
+    phoneLink.hidden = false;
+    visibleContacts++;
+  } else {
+    phoneLink.hidden = true;
+  }
+
+  const email = String(info.email || '').trim();
+  const emailLink = document.getElementById('restaurantEmailLink');
+  document.getElementById('restaurantEmail').textContent = email;
+  if (email) {
+    emailLink.href = 'mailto:' + email;
+    emailLink.hidden = false;
+    visibleContacts++;
+  } else {
+    emailLink.hidden = true;
+  }
+
+  document.getElementById('restaurantContact').hidden = visibleContacts === 0;
+
+  const hours = String(info.hours || '').trim();
+  const hoursWrap = document.getElementById('restaurantHoursWrap');
+  document.getElementById('restaurantHours').textContent = hours;
+  hoursWrap.hidden = !hours;
+
+  const socialWrap = document.getElementById('restaurantSocials');
+  socialWrap.innerHTML = '';
+  SOCIAL_DEFS.forEach(def => {
+    const href = socialHref(info[def.key], def.base);
+    if (!href || !isSafeHttpUrl(href)) return;
+
+    const link = document.createElement('a');
+    link.className = 'social-link';
+    link.href = href;
+    link.target = '_blank';
+    link.rel = 'noopener';
+    link.title = def.label;
+    link.setAttribute('aria-label', def.label);
+    link.innerHTML = def.icon;
+    socialWrap.appendChild(link);
+  });
+  socialWrap.hidden = socialWrap.childElementCount === 0;
+}
+
+async function loadRestaurantInfo() {
+  let cached = null;
+  try {
+    cached = JSON.parse(localStorage.getItem(RESTAURANT_CACHE_KEY) || 'null');
+  } catch (e) {
+    cached = null;
+  }
+  if (cached && typeof cached === 'object') {
+    applyRestaurantInfo(cached);
+  }
+
+  if (typeof isFirebaseConfigured === 'undefined' || !isFirebaseConfigured()) return;
+
+  try {
+    const remote = await fbGetDoc('restaurant', 'info');
+    if (remote && typeof remote === 'object') {
+      applyRestaurantInfo(remote);
+      try {
+        localStorage.setItem(RESTAURANT_CACHE_KEY, JSON.stringify(remote));
+      } catch (e) {}
+    }
+  } catch (e) {}
+}
+
 (async () => {
   const data = await loadMenuData();
   if (data && data.length > 0) {
@@ -760,6 +1054,7 @@ function initQR() {
   await loadRatings();
   renderMenu();
   initQR();
+  loadRestaurantInfo();
   setTimeout(() => {
     const splash = document.getElementById('splash');
     if (splash) splash.classList.add('splash-hidden');

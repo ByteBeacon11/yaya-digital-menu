@@ -225,6 +225,59 @@
         </div>
 
         <div id="page-settings" class="admin-page">
+          <div class="settings-section" id="restaurantSettingsSection">
+            <h3>Restaurant Details</h3>
+            <p>These details appear at the top of the customer menu. Leave a field empty to hide it.</p>
+            <form id="restaurantForm" autocomplete="off" novalidate>
+              <div class="admin-modal-grid">
+                <div class="admin-field">
+                  <label for="restName">Restaurant Name *</label>
+                  <input type="text" id="restName" maxlength="60" required>
+                </div>
+                <div class="admin-field">
+                  <label for="restTagline">Tagline</label>
+                  <input type="text" id="restTagline" maxlength="90" placeholder="Savor the Flavor, Feel the Love">
+                </div>
+                <div class="admin-field">
+                  <label for="restPhone">Mobile Phone</label>
+                  <input type="tel" id="restPhone" maxlength="30" placeholder="+251 911 123 4567">
+                </div>
+                <div class="admin-field">
+                  <label for="restEmail">Email Address</label>
+                  <input type="email" id="restEmail" maxlength="80" placeholder="hello@restaurant.com">
+                </div>
+                <div class="admin-field admin-field-full">
+                  <label for="restLocation">Location</label>
+                  <input type="text" id="restLocation" maxlength="90" placeholder="Addis Ababa, Bole-Atlas">
+                </div>
+                <div class="admin-field admin-field-full">
+                  <label for="restMapUrl">Google Maps Link (optional)</label>
+                  <input type="url" id="restMapUrl" maxlength="300" placeholder="https://maps.google.com/?q=...">
+                </div>
+                <div class="admin-field admin-field-full">
+                  <label for="restHours">Opening Hours</label>
+                  <input type="text" id="restHours" maxlength="90" placeholder="Mon - Sun · 8:00 AM - 11:00 PM">
+                </div>
+                <div class="admin-field">
+                  <label for="restInstagram">Instagram</label>
+                  <input type="text" id="restInstagram" maxlength="120" placeholder="@yayashouse">
+                </div>
+                <div class="admin-field">
+                  <label for="restFacebook">Facebook</label>
+                  <input type="text" id="restFacebook" maxlength="120" placeholder="yayashouse">
+                </div>
+                <div class="admin-field admin-field-full">
+                  <label for="restTelegram">Telegram</label>
+                  <input type="text" id="restTelegram" maxlength="120" placeholder="@yayashouse">
+                </div>
+              </div>
+              <p id="restaurantStatus" class="admin-form-error" style="text-align:left;"></p>
+              <div class="admin-modal-actions" style="border:none;padding:12px 0 0;">
+                <button type="button" id="restaurantResetBtn" class="admin-btn admin-btn-outline">Reset</button>
+                <button type="submit" id="restaurantSaveBtn" class="admin-btn admin-btn-primary">Save Details</button>
+              </div>
+            </form>
+          </div>
           <div class="settings-section">
             <h3>Database Configuration</h3>
             <p>Connect Firebase Firestore (free tier) to sync menu data across all devices.</p>

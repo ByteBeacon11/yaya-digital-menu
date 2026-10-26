@@ -208,6 +208,27 @@ const dbConfigStatus = document.getElementById('dbConfigStatus');
 
 const categoryStatusGrid = document.getElementById('categoryStatusGrid');
 
+/* ─── RESTAURANT DETAILS REFS ─── */
+const restaurantSettingsSection = document.getElementById('restaurantSettingsSection');
+const restaurantForm = document.getElementById('restaurantForm');
+const restaurantStatus = document.getElementById('restaurantStatus');
+const restaurantResetBtn = document.getElementById('restaurantResetBtn');
+const restaurantSaveBtn = document.getElementById('restaurantSaveBtn');
+
+const RESTAURANT_INFO_KEY = 'yayaRestaurantInfo';
+const RESTAURANT_DEFAULTS = {
+  name: "Yaya's House",
+  tagline: 'Savor the Flavor, Feel the Love',
+  phone: '+251 911 123 00321',
+  email: 'yayashouse@gmail.com',
+  location: 'Addis Ababa, Bole-Atlas',
+  mapUrl: '',
+  hours: '',
+  instagram: '',
+  facebook: '',
+  telegram: ''
+};
+
 /* ─── ITEM IMAGE REFS ─── */
 const itemImageFile = document.getElementById('itemImageFile');
 const itemImagePick = document.getElementById('itemImagePick');
@@ -503,7 +524,7 @@ function updateDbStatus() {
 }
 
 /* ─── SETTINGS ─── */
-function loadSettingsForm() {
+async function loadSettingsForm() {
   const config = getDbConfig();
   if (config) {
     document.getElementById('fbProjectId').value = config.projectId || '';
@@ -514,7 +535,139 @@ function loadSettingsForm() {
     document.getElementById('fbAppId').value = config.appId || '';
   }
   dbConfigStatus.textContent = '';
+
+  // Restaurant details are manager-only.
+  if (restaurantSettingsSection) {
+    const isManager = currentUserRole === 'manager';
+    restaurantSettingsSection.style.display = isManager ? '' : 'none';
+    if (isManager) await loadRestaurantForm();
+  }
 }
+
+/* ─── RESTAURANT DETAILS ─── */
+const restaurantFields = {
+  name: 'restName',
+  tagline: 'restTagline',
+  phone: 'restPhone',
+  email: 'restEmail',
+  location: 'restLocation',
+  mapUrl: 'restMapUrl',
+  hours: 'restHours',
+  instagram: 'restInstagram',
+  facebook: 'restFacebook',
+  telegram: 'restTelegram'
+};
+
+function setRestaurantStatus(text, type) {
+  if (!restaurantStatus) return;
+  restaurantStatus.textContent = text;
+  restaurantStatus.style.color = type === 'success' ? '#2e7d32' : (type === 'error' ? '#c62828' : '#8a7a6a');
+}
+
+function applyBrandName(name) {
+  if (!name) return;
+  document.querySelectorAll('.sidebar-brand h2, .admin-login-logo h1').forEach(el => {
+    el.textContent = name;
+  });
+  document.title = name + ' - Admin';
+}
+
+async function getRestaurantInfo() {
+  let info = lsLoad(RESTAURANT_INFO_KEY, null);
+
+  if (isFirebaseConfigured()) {
+    const remote = await fbGetDoc('restaurant', 'info');
+    if (remote) {
+      info = remote;
+      lsSave(RESTAURANT_INFO_KEY, remote);
+    }
+  }
+
+  return Object.assign({}, RESTAURANT_DEFAULTS, info || {});
+}
+
+function fillRestaurantForm(info) {
+  Object.entries(restaurantFields).forEach(([key, id]) => {
+    const el = document.getElementById(id);
+    if (el) el.value = info[key] || '';
+  });
+}
+
+async function loadRestaurantForm() {
+  setRestaurantStatus('');
+  const info = await getRestaurantInfo();
+  fillRestaurantForm(info);
+  applyBrandName(info.name);
+}
+
+restaurantForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  if (currentUserRole !== 'manager') {
+    setRestaurantStatus('Only a manager can update the restaurant details.', 'error');
+    return;
+  }
+
+  const info = {};
+  Object.entries(restaurantFields).forEach(([key, id]) => {
+    const el = document.getElementById(id);
+    info[key] = el ? el.value.trim() : '';
+  });
+
+  if (!info.name) {
+    setRestaurantStatus('Restaurant name is required.', 'error');
+    document.getElementById('restName').focus();
+    return;
+  }
+
+  if (info.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(info.email)) {
+    setRestaurantStatus('Enter a valid email address, for example hello@restaurant.com.', 'error');
+    document.getElementById('restEmail').focus();
+    return;
+  }
+
+  if (info.phone && info.phone.replace(/\D/g, '').length < 7) {
+    setRestaurantStatus('Enter a valid mobile phone number (at least 7 digits).', 'error');
+    document.getElementById('restPhone').focus();
+    return;
+  }
+
+  if (info.mapUrl) {
+    let parsed = null;
+    try { parsed = new URL(info.mapUrl); } catch (err) {}
+    if (!parsed || (parsed.protocol !== 'http:' && parsed.protocol !== 'https:')) {
+      setRestaurantStatus('The Google Maps link must start with http:// or https://.', 'error');
+      document.getElementById('restMapUrl').focus();
+      return;
+    }
+  }
+
+  info.updatedAt = Date.now();
+  info.updatedBy = currentUserEmail || '';
+
+  restaurantSaveBtn.disabled = true;
+  setRestaurantStatus('Saving...', 'info');
+
+  if (isFirebaseConfigured()) {
+    const saved = await fbSaveDoc('restaurant', 'info', info);
+    if (!saved) {
+      restaurantSaveBtn.disabled = false;
+      setRestaurantStatus('Could not save the details. Check your connection and try again.', 'error');
+      return;
+    }
+  }
+
+  lsSave(RESTAURANT_INFO_KEY, info);
+  applyBrandName(info.name);
+  restaurantSaveBtn.disabled = false;
+  setRestaurantStatus('Saved. The customer menu will show these details.', 'success');
+});
+
+restaurantResetBtn.addEventListener('click', async () => {
+  setRestaurantStatus('Reloading saved details...', 'info');
+  await loadRestaurantForm();
+  setRestaurantStatus('');
+});
 
 dbConfigForm.addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -1303,3 +1456,4 @@ exportBtn.addEventListener('click', () => {
 
 /* ─── INIT ─── */
 initFirebase();
+getRestaurantInfo().then(info => applyBrandName(info.name));
