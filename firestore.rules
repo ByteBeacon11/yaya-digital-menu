@@ -1,0 +1,34 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /menuItems/{item} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    // Background images live in their own collection so menu documents stay small.
+    // Anyone can view them (the menu is public); only signed-in staff can change them.
+    match /menuImages/{item} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    match /ratings/{item} {
+      allow read: if true;
+      allow write: if true;
+    }
+    match /_config/{doc} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    match /staff/{uid} {
+      allow create: if request.auth != null && request.auth.uid == uid;
+      allow read, update: if request.auth != null && (
+        request.auth.uid == uid ||
+        exists(/databases/$(database)/documents/staff/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/staff/$(request.auth.uid)).data.role == 'manager'
+      );
+      allow delete: if request.auth != null && request.auth.uid != uid &&
+        exists(/databases/$(database)/documents/staff/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/staff/$(request.auth.uid)).data.role == 'manager';
+    }
+  }
+}

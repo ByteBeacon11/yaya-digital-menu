@@ -416,6 +416,88 @@ body {
   line-height: 1.4;
 }
 
+/* ── ITEM BACKGROUND IMAGES ── */
+.menu-item.has-image {
+  position: relative;
+  overflow: hidden;
+  justify-content: flex-end;
+  min-height: 230px;
+  background-color: #2c1810;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+.menu-item.has-image::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg,
+    rgba(28, 15, 8, 0.08) 0%,
+    rgba(28, 15, 8, 0.45) 42%,
+    rgba(28, 15, 8, 0.92) 100%);
+}
+
+.menu-item.has-image > * {
+  position: relative;
+  z-index: 1;
+}
+
+.menu-item.has-image .item-name {
+  color: #fff;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.55);
+}
+
+.menu-item.has-image .item-price {
+  color: #ffc27a;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+}
+
+.menu-item.has-image .item-desc {
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+}
+
+.menu-item.has-image .item-ingredient {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  text-shadow: none;
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+
+.menu-item.has-image .item-ingredient:hover {
+  background: #f0a050;
+  color: #fff;
+}
+
+.menu-item.has-image .star {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.menu-item.has-image .star.filled {
+  color: #ffc27a;
+}
+
+.menu-item.has-image .rating-count {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Placeholder shown while the image document is being fetched */
+.menu-item.image-pending {
+  background-image: linear-gradient(115deg, #3b2416 0%, #5f3a22 45%, #3b2416 100%);
+  background-size: 220% 100%;
+  animation: imageShimmer 1.6s linear infinite;
+}
+
+@keyframes imageShimmer {
+  from { background-position: 0% 0; }
+  to { background-position: -220% 0; }
+}
+
 .item-category {
   font-size: 0.75rem;
   text-transform: uppercase;

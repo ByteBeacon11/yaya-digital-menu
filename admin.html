@@ -124,6 +124,13 @@
               </div>
             </div>
             <div class="dash-card">
+              <div class="dash-card-icon">&#10004;</div>
+              <div class="dash-card-body">
+                <span class="dash-card-number" id="dashActiveItems">0</span>
+                <span class="dash-card-label">Active Items</span>
+              </div>
+            </div>
+            <div class="dash-card">
               <div class="dash-card-icon">&#9737;</div>
               <div class="dash-card-body">
                 <span class="dash-card-number" id="dashTotalStaff">0</span>
@@ -156,6 +163,12 @@
         </div>
 
         <div id="page-menu" class="admin-page">
+          <div class="category-status-section">
+            <h3 class="category-status-title">Category Status</h3>
+            <p class="category-status-subtitle">Toggle entire categories on or off from the customer menu</p>
+            <div class="category-status-grid" id="categoryStatusGrid"></div>
+          </div>
+
           <div class="admin-toolbar">
             <div class="admin-toolbar-inner">
               <div class="admin-toolbar-left">
@@ -179,6 +192,7 @@
                   <th>Section</th>
                   <th>Type</th>
                   <th>Sub</th>
+                  <th>Status</th>
                   <th>Description</th>
                   <th>Ingredients</th>
                   <th>Actions</th>
@@ -320,7 +334,31 @@
             <label for="itemIngredients">Ingredients (comma separated) *</label>
             <input type="text" id="itemIngredients" placeholder="e.g. Chicken, Berbere, Onions" required>
           </div>
+          <div class="admin-field admin-field-full">
+            <label for="itemImageFile">Background Image</label>
+            <div class="admin-image-upload">
+              <div class="admin-image-preview" id="itemImagePreview" title="Click or drop an image here">
+                <span class="admin-image-placeholder" id="itemImagePlaceholder">No image selected</span>
+              </div>
+              <div class="admin-image-controls">
+                <input type="file" id="itemImageFile" accept="image/jpeg,image/png,image/webp,image/gif" hidden>
+                <button type="button" id="itemImagePick" class="admin-btn admin-btn-outline admin-btn-sm">Choose Image</button>
+                <button type="button" id="itemImageRemove" class="admin-btn admin-btn-danger admin-btn-sm" style="display:none;">Remove</button>
+                <p class="admin-image-hint">JPG, PNG, WebP or GIF. Resized automatically and shown behind this item on the live menu.</p>
+                <label class="admin-image-focus" id="itemImagePositionWrap" for="itemImagePosition" style="display:none;">
+                  <span>Image focus</span>
+                  <select id="itemImagePosition">
+                    <option value="center">Center</option>
+                    <option value="top">Top</option>
+                    <option value="bottom">Bottom</option>
+                  </select>
+                </label>
+                <p id="itemImageStatus" class="admin-image-status"></p>
+              </div>
+            </div>
+          </div>
         </div>
+        <p id="itemFormError" class="admin-form-error"></p>
         <div class="admin-modal-actions">
           <button type="button" id="cancelModalBtn" class="admin-btn admin-btn-outline">Cancel</button>
           <button type="submit" id="saveItemBtn" class="admin-btn admin-btn-primary">Save Item</button>

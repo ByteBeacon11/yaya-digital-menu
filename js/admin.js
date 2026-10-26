@@ -1,77 +1,77 @@
 const MENU_KEY = 'yayaMenuData';
 
 const defaultMenuData = [
-  {id:1,name:'Doro Wat',price:2000,section:'ethiopian',type:'non-fasting',desc:'Spicy chicken stew simmered with berbere spice and hard-boiled eggs, served with injera',ingredients:['Chicken','Berbere','Onions','Hard-boiled Eggs','Injera','Niter Kibbeh']},
-  {id:2,name:'Sega Wat',price:1950,section:'ethiopian',type:'non-fasting',desc:'Rich and flavorful beef stew slow-cooked in berbere sauce',ingredients:['Beef','Berbere','Onions','Garlic','Niter Kibbeh','Injera']},
-  {id:3,name:'Bozena Shiro',price:600,section:'ethiopian',type:'non-fasting',desc:'Savory shiro stew with tender pieces of beef',ingredients:['Beef','Chickpea Flour','Berbere','Onions','Garlic','Injera']},
-  {id:4,name:'Tibs',price:1500,section:'ethiopian',type:'non-fasting',desc:'Sautéed meat with onions, peppers, and aromatic spices',ingredients:['Beef/Lamb','Onions','Bell Peppers','Rosemary','Niter Kibbeh','Injera']},
-  {id:5,name:'Teferesho',price:1300,section:'ethiopian',type:'non-fasting',desc:'Traditional Ethiopian tripe dish prepared with spiced butter and herbs',ingredients:['Tripe','Niter Kibbeh','Spiced Butter','Herbs','Injera']},
-  {id:6,name:'Kitfo',price:2080,section:'ethiopian',type:'non-fasting',desc:'Minced raw beef seasoned with mitmita and clarified butter',ingredients:['Minced Beef','Mitmita','Clarified Butter','Ayib','Injera']},
-  {id:7,name:'Shiro Wat',price:300,section:'ethiopian',type:'fasting',desc:'Creamy chickpea and lentil stew simmered with garlic and berbere',ingredients:['Chickpea Flour','Lentils','Berbere','Garlic','Onions','Injera']},
-  {id:8,name:'Misir Wat',price:400,section:'ethiopian',type:'fasting',desc:'Red lentil stew cooked in spicy berbere sauce',ingredients:['Red Lentils','Berbere','Onions','Garlic','Ginger','Injera']},
-  {id:9,name:'Gomen',price:350,section:'ethiopian',type:'fasting',desc:'Sautéed collard greens with garlic, ginger, and onions',ingredients:['Collard Greens','Garlic','Ginger','Onions','Olive Oil','Injera']},
-  {id:10,name:'Beyaynet',price:400,section:'ethiopian',type:'fasting',desc:'Assorted vegetarian platter with shiro, misir, gomen, and more',ingredients:['Shiro','Misir','Gomen','Lentils','Vegetables','Injera']},
-  {id:11,name:'Pasta Besego',price:350,section:'ethiopian',type:'fasting',desc:'Pasta tossed with seasoned minced meat sauce',ingredients:['Pasta','Minced Meat','Tomato Sauce','Onions','Spices']},
-  {id:12,name:'Pasta Batikelt',price:350,section:'ethiopian',type:'fasting',desc:'Pasta with fresh sautéed vegetables in light tomato sauce',ingredients:['Pasta','Mixed Vegetables','Tomato Sauce','Garlic','Olive Oil']},
-  {id:13,name:'Denech Wat',price:400,section:'ethiopian',type:'fasting',desc:'Hearty potato stew seasoned with turmeric and herbs',ingredients:['Potatoes','Turmeric','Onions','Garlic','Herbs','Injera']},
-  {id:14,name:'Ruz Besoya',price:370,section:'ethiopian',type:'fasting',desc:'Rice with flavorful meat sauce and aromatic spices',ingredients:['Rice','Meat Sauce','Spices','Onions','Tomato']},
-  {id:15,name:'Tegabino',price:500,section:'ethiopian',type:'fasting',desc:'Traditional thick bean and grain stew, rich and filling',ingredients:['Beans','Grains','Berbere','Onions','Garlic','Injera']},
-  {id:16,name:'Chicken Burger',price:1040,section:'international',type:'non-fasting',subsection:'burgers',desc:'Crispy chicken patty with lettuce, tomato, and mayo',ingredients:['Chicken Patty','Lettuce','Tomato','Mayo','Burger Bun','Fries']},
-  {id:17,name:'Beef Burger',price:1105,section:'international',type:'non-fasting',subsection:'burgers',desc:'Classic beef patty with lettuce, tomato, and onions',ingredients:['Beef Patty','Lettuce','Tomato','Onions','Burger Bun','Fries']},
-  {id:18,name:'Cheese Burger',price:1170,section:'international',type:'non-fasting',subsection:'burgers',desc:'Beef patty topped with melted cheddar cheese',ingredients:['Beef Patty','Cheddar Cheese','Lettuce','Tomato','Burger Bun','Fries']},
-  {id:19,name:'Double Cheese Burger',price:1430,section:'international',type:'non-fasting',subsection:'burgers',desc:'Two beef patties with double cheddar cheese',ingredients:['2x Beef Patties','Double Cheddar','Lettuce','Tomato','Burger Bun','Fries']},
-  {id:20,name:"Yaya's Special Burger",price:1560,section:'international',type:'non-fasting',subsection:'burgers',desc:'Signature beef patty with caramelized onions, bacon, and special sauce',ingredients:['Beef Patty','Bacon','Caramelized Onions','Special Sauce','Burger Bun','Fries']},
-  {id:21,name:"Yaya's Double Special",price:1950,section:'international',type:'non-fasting',subsection:'burgers',desc:'Double the patty, double the cheese – our ultimate burger',ingredients:['2x Beef Patties','Double Cheddar','Bacon','Special Sauce','Burger Bun','Fries']},
-  {id:22,name:'Margherita Pizza',price:1170,section:'international',type:'non-fasting',subsection:'pizzas',desc:'Classic tomato sauce, mozzarella, and fresh basil',ingredients:['Tomato Sauce','Mozzarella','Fresh Basil','Olive Oil','Pizza Dough']},
-  {id:23,name:'Chicken Pizza',price:1430,section:'international',type:'non-fasting',subsection:'pizzas',desc:'Topped with grilled chicken, bell peppers, and mozzarella',ingredients:['Grilled Chicken','Bell Peppers','Mozzarella','Tomato Sauce','Pizza Dough']},
-  {id:24,name:'Beef Pizza',price:1430,section:'international',type:'non-fasting',subsection:'pizzas',desc:'Seasoned beef with onions, olives, and melted cheese',ingredients:['Seasoned Beef','Onions','Olives','Mozzarella','Pizza Dough']},
-  {id:25,name:'Tuna Pizza',price:1300,section:'international',type:'non-fasting',subsection:'pizzas',desc:'Tuna, onions, olives, and mozzarella on crispy crust',ingredients:['Tuna','Onions','Olives','Mozzarella','Tomato Sauce','Pizza Dough']},
-  {id:26,name:"Yaya's Special Pizza",price:1820,section:'international',type:'non-fasting',subsection:'pizzas',desc:'Our signature pizza loaded with chicken, beef, veggies, and extra cheese',ingredients:['Chicken','Beef','Mixed Veggies','Extra Cheese','Special Sauce','Pizza Dough']},
-  {id:27,name:'Chicken Mofo',price:1250,section:'international',type:'non-fasting',subsection:'chickens',desc:'Crispy fried chicken pieces with spicy dipping sauce',ingredients:['Chicken Pieces','Flour Coating','Spices','Dipping Sauce','Fries']},
-  {id:28,name:'Grilled Chicken',price:1560,section:'international',type:'non-fasting',subsection:'chickens',desc:'Marinated chicken breast grilled to perfection, served with rice',ingredients:['Chicken Breast','Herb Marinade','Rice','Grilled Vegetables']},
-  {id:29,name:'Chicken Wings',price:1100,section:'international',type:'non-fasting',subsection:'chickens',desc:"Crispy wings tossed in Yaya's signature hot sauce",ingredients:['Chicken Wings','Hot Sauce','Butter','Blue Cheese Dip','Celery']},
-  {id:30,name:'Chicken Rice',price:1300,section:'international',type:'non-fasting',subsection:'chickens',desc:'Tender chicken pieces stir-fried with seasoned rice and vegetables',ingredients:['Chicken','Rice','Mixed Vegetables','Soy Sauce','Spices']},
-  {id:31,name:"Yaya's Special Combo",price:2080,section:'international',type:'non-fasting',subsection:'chickens',desc:'Grilled chicken, wings, fries, and coleslaw – the full experience',ingredients:['Grilled Chicken','Chicken Wings','Fries','Coleslaw','Dipping Sauces']},
-  {id:32,name:'Samosa',price:585,section:'international',type:'fasting',desc:'Crispy pastry filled with spiced potatoes and peas',ingredients:['Potatoes','Peas','Spices','Pastry Dough','Oil']},
-  {id:33,name:'Spring Rolls',price:650,section:'international',type:'fasting',desc:'Lightly fried rolls stuffed with vegetables and glass noodles',ingredients:['Mixed Vegetables','Glass Noodles','Spring Roll Wrappers','Soy Sauce','Oil']},
-  {id:34,name:'Veggie Pizza',price:1300,section:'international',type:'fasting',desc:'Thin-crust pizza topped with fresh seasonal vegetables and mozzarella',ingredients:['Seasonal Vegetables','Mozzarella','Tomato Sauce','Pizza Dough']},
-  {id:35,name:'Fruit Salad',price:585,section:'international',type:'fasting',desc:'Fresh seasonal fruits drizzled with honey and lime',ingredients:['Seasonal Fruits','Honey','Lime Juice','Mint']},
-  {id:67,name:'Vegetable Pizza',price:700,section:'international',type:'fasting',subsection:'pizzas',desc:'Thin-crust pizza loaded with fresh seasonal vegetables and cheese',ingredients:['Seasonal Vegetables','Mozzarella','Tomato Sauce','Pizza Dough']},
-  {id:68,name:'Chicken Burrito',price:900,section:'international',type:'non-fasting',subsection:'burritos',desc:'Flour tortilla filled with seasoned chicken, rice, beans, and cheese',ingredients:['Chicken','Rice','Beans','Cheese','Flour Tortilla','Sour Cream']},
-  {id:69,name:'Beef Burrito',price:870,section:'international',type:'non-fasting',subsection:'burritos',desc:'Hearty beef burrito with rice, beans, and melted cheese',ingredients:['Beef','Rice','Beans','Cheese','Flour Tortilla','Salsa']},
-  {id:70,name:'Veggie Burrito',price:700,section:'international',type:'fasting',subsection:'burritos',desc:'Fresh vegetable burrito with rice, beans, and guacamole',ingredients:['Mixed Vegetables','Rice','Beans','Guacamole','Flour Tortilla']},
-  {id:71,name:"Yaya's Special Burrito",price:1100,section:'international',type:'non-fasting',subsection:'burritos',desc:'Our signature burrito loaded with chicken, beef, and all the fixings',ingredients:['Chicken','Beef','Rice','Beans','Cheese','Guacamole','Sour Cream','Flour Tortilla']},
-  {id:36,name:'Macchiato',price:130,section:'hot-drinks',type:null,desc:'Espresso with a touch of steamed milk',ingredients:['Espresso','Steamed Milk']},
-  {id:37,name:'Ethiopian Coffee',price:60,section:'hot-drinks',type:null,desc:'Traditional coffee ceremony style, rich and aromatic',ingredients:['Ethiopian Coffee Beans','Water','Sugar (optional)']},
-  {id:38,name:'Spiced Tea',price:120,section:'hot-drinks',type:null,desc:'Aromatic black tea with cardamom, cinnamon, and cloves',ingredients:['Black Tea','Cardamom','Cinnamon','Cloves','Honey']},
-  {id:39,name:'Tea',price:60,section:'hot-drinks',type:null,desc:'Premium black or herbal tea',ingredients:['Tea Leaves','Hot Water','Sugar (optional)']},
-  {id:40,name:'Avocado Juice',price:350,section:'cold-drinks',type:null,subsection:'juices',desc:'Creamy fresh avocado blended with milk and sugar',ingredients:['Avocado','Milk','Sugar','Vanilla']},
-  {id:41,name:'Mango Juice',price:300,section:'cold-drinks',type:null,subsection:'juices',desc:'Sweet ripe mango blended to perfection',ingredients:['Ripe Mango','Milk','Sugar','Ice']},
-  {id:42,name:'Pineapple Juice',price:390,section:'cold-drinks',type:null,subsection:'juices',desc:'Refreshing pineapple juice with a hint of lime',ingredients:['Pineapple','Lime','Sugar','Ice']},
-  {id:43,name:'Orange Juice',price:390,section:'cold-drinks',type:null,subsection:'juices',desc:'Freshly squeezed orange juice',ingredients:['Fresh Oranges','Sugar (optional)','Ice']},
-  {id:44,name:"Yaya's Special Juice",price:585,section:'cold-drinks',type:null,subsection:'juices',desc:'Our signature blend of tropical fruits and berries',ingredients:['Tropical Fruits','Berries','Honey','Ice']},
-  {id:45,name:'Strawberry Milkshake',price:585,section:'cold-drinks',type:null,subsection:'milkshakes',desc:'Creamy strawberry milkshake topped with whipped cream',ingredients:['Strawberries','Vanilla Ice Cream','Milk','Whipped Cream']},
-  {id:46,name:'Chocolate Milkshake',price:585,section:'cold-drinks',type:null,subsection:'milkshakes',desc:'Rich chocolate milkshake with a fudge swirl',ingredients:['Chocolate Ice Cream','Milk','Chocolate Fudge','Whipped Cream']},
-  {id:47,name:'Vanilla Milkshake',price:520,section:'cold-drinks',type:null,subsection:'milkshakes',desc:'Classic vanilla milkshake made with real vanilla bean',ingredients:['Vanilla Ice Cream','Milk','Vanilla Bean','Whipped Cream']},
-  {id:48,name:'Banana Milkshake',price:585,section:'cold-drinks',type:null,subsection:'milkshakes',desc:'Smooth banana milkshake with a touch of cinnamon',ingredients:['Banana','Vanilla Ice Cream','Milk','Cinnamon','Whipped Cream']},
-  {id:49,name:'Oreo Milkshake',price:650,section:'cold-drinks',type:null,subsection:'milkshakes',desc:'Crushed Oreo cookies blended in creamy vanilla milkshake',ingredients:['Oreo Cookies','Vanilla Ice Cream','Milk','Whipped Cream']},
-  {id:50,name:"Yaya's Special Shake",price:715,section:'cold-drinks',type:null,subsection:'milkshakes',desc:'Our signature mix of chocolate, caramel, and brownie bits',ingredients:['Chocolate','Caramel','Brownie Bits','Ice Cream','Milk','Whipped Cream']},
-  {id:51,name:'Mixed Berry Smoothie',price:585,section:'cold-drinks',type:null,subsection:'smoothies',desc:'Blend of strawberries, blueberries, and raspberries with yogurt',ingredients:['Strawberries','Blueberries','Raspberries','Yogurt','Honey']},
-  {id:52,name:'Tropical Smoothie',price:585,section:'cold-drinks',type:null,subsection:'smoothies',desc:'Mango, pineapple, and coconut blended with yogurt',ingredients:['Mango','Pineapple','Coconut Milk','Yogurt','Honey']},
-  {id:53,name:'Green Smoothie',price:520,section:'cold-drinks',type:null,subsection:'smoothies',desc:'Spinach, banana, apple, and ginger – healthy and refreshing',ingredients:['Spinach','Banana','Apple','Ginger','Lime']},
-  {id:54,name:'Peanut Butter Smoothie',price:650,section:'cold-drinks',type:null,subsection:'smoothies',desc:'Creamy peanut butter, banana, and chocolate protein blend',ingredients:['Peanut Butter','Banana','Chocolate Protein','Milk','Honey']},
-  {id:55,name:'Mango Smoothie',price:585,section:'cold-drinks',type:null,subsection:'smoothies',desc:'Fresh mango blended with yogurt and a hint of honey',ingredients:['Mango','Yogurt','Honey','Ice']},
-  {id:56,name:'Classic Mojito',price:585,section:'cold-drinks',type:null,subsection:'mojitos',desc:'Traditional Cuban mojito with fresh mint and lime',ingredients:['White Rum','Fresh Mint','Lime','Sugar','Soda Water','Ice']},
-  {id:57,name:'Strawberry Mojito',price:650,section:'cold-drinks',type:null,subsection:'mojitos',desc:'Sweet strawberry twist on the classic mojito',ingredients:['White Rum','Fresh Strawberries','Mint','Lime','Sugar','Soda Water','Ice']},
-  {id:58,name:'Mango Mojito',price:650,section:'cold-drinks',type:null,subsection:'mojitos',desc:'Tropical mango purée meets refreshing mojito',ingredients:['White Rum','Mango Purée','Mint','Lime','Sugar','Soda Water','Ice']},
-  {id:59,name:'Passion Fruit Mojito',price:715,section:'cold-drinks',type:null,subsection:'mojitos',desc:'Tangy passion fruit with cool mint and lime',ingredients:['White Rum','Passion Fruit','Mint','Lime','Sugar','Soda Water','Ice']},
-  {id:60,name:'Blueberry Mojito',price:650,section:'cold-drinks',type:null,subsection:'mojitos',desc:'Muddled blueberries with classic mojito freshness',ingredients:['White Rum','Blueberries','Mint','Lime','Sugar','Soda Water','Ice']},
-  {id:61,name:'Watermelon Mojito',price:650,section:'cold-drinks',type:null,subsection:'mojitos',desc:'Juicy watermelon blended into a refreshing mojito',ingredients:['White Rum','Watermelon Purée','Mint','Lime','Sugar','Soda Water','Ice']},
-  {id:62,name:"Yaya's Special Mojito",price:780,section:'cold-drinks',type:null,subsection:'mojitos',desc:'Our signature mojito with triple fruit blend and a secret twist',ingredients:['White Rum','Triple Fruit Blend','Mint','Lime','Secret Syrup','Soda Water','Ice']},
-  {id:63,name:'Soda',price:90,section:'cold-drinks',type:null,subsection:'soft-drinks',desc:'Choice of Coca-Cola, Sprite, Fanta, or Pepsi',ingredients:['Carbonated Water','Sugar','Flavoring']},
-  {id:64,name:'Bottled Water',price:120,section:'cold-drinks',type:null,subsection:'soft-drinks',desc:'Pure, refreshing bottled water',ingredients:['Purified Water','Electrolytes']},
-  {id:65,name:'Energy Drink',price:390,section:'cold-drinks',type:null,subsection:'soft-drinks',desc:'Choice of Red Bull or Monster',ingredients:['Caffeine','Taurine','B Vitamins','Carbonated Water','Sugar']},
-  {id:66,name:'Sparkling Water',price:195,section:'cold-drinks',type:null,subsection:'soft-drinks',desc:'Refreshing carbonated mineral water',ingredients:['Carbonated Water','Natural Minerals']}
+  {id:1,name:'Doro Wat',price:2000,section:'ethiopian',type:'non-fasting',desc:'Spicy chicken stew simmered with berbere spice and hard-boiled eggs, served with injera',ingredients:['Chicken','Berbere','Onions','Hard-boiled Eggs','Injera','Niter Kibbeh'],active:true},
+  {id:2,name:'Sega Wat',price:1950,section:'ethiopian',type:'non-fasting',desc:'Rich and flavorful beef stew slow-cooked in berbere sauce',ingredients:['Beef','Berbere','Onions','Garlic','Niter Kibbeh','Injera'],active:true},
+  {id:3,name:'Bozena Shiro',price:600,section:'ethiopian',type:'non-fasting',desc:'Savory shiro stew with tender pieces of beef',ingredients:['Beef','Chickpea Flour','Berbere','Onions','Garlic','Injera'],active:true},
+  {id:4,name:'Tibs',price:1500,section:'ethiopian',type:'non-fasting',desc:'Sautéed meat with onions, peppers, and aromatic spices',ingredients:['Beef/Lamb','Onions','Bell Peppers','Rosemary','Niter Kibbeh','Injera'],active:true},
+  {id:5,name:'Teferesho',price:1300,section:'ethiopian',type:'non-fasting',desc:'Traditional Ethiopian tripe dish prepared with spiced butter and herbs',ingredients:['Tripe','Niter Kibbeh','Spiced Butter','Herbs','Injera'],active:true},
+  {id:6,name:'Kitfo',price:2080,section:'ethiopian',type:'non-fasting',desc:'Minced raw beef seasoned with mitmita and clarified butter',ingredients:['Minced Beef','Mitmita','Clarified Butter','Ayib','Injera'],active:true},
+  {id:7,name:'Shiro Wat',price:300,section:'ethiopian',type:'fasting',desc:'Creamy chickpea and lentil stew simmered with garlic and berbere',ingredients:['Chickpea Flour','Lentils','Berbere','Garlic','Onions','Injera'],active:true},
+  {id:8,name:'Misir Wat',price:400,section:'ethiopian',type:'fasting',desc:'Red lentil stew cooked in spicy berbere sauce',ingredients:['Red Lentils','Berbere','Onions','Garlic','Ginger','Injera'],active:true},
+  {id:9,name:'Gomen',price:350,section:'ethiopian',type:'fasting',desc:'Sautéed collard greens with garlic, ginger, and onions',ingredients:['Collard Greens','Garlic','Ginger','Onions','Olive Oil','Injera'],active:true},
+  {id:10,name:'Beyaynet',price:400,section:'ethiopian',type:'fasting',desc:'Assorted vegetarian platter with shiro, misir, gomen, and more',ingredients:['Shiro','Misir','Gomen','Lentils','Vegetables','Injera'],active:true},
+  {id:11,name:'Pasta Besego',price:350,section:'ethiopian',type:'fasting',desc:'Pasta tossed with seasoned minced meat sauce',ingredients:['Pasta','Minced Meat','Tomato Sauce','Onions','Spices'],active:true},
+  {id:12,name:'Pasta Batikelt',price:350,section:'ethiopian',type:'fasting',desc:'Pasta with fresh sautéed vegetables in light tomato sauce',ingredients:['Pasta','Mixed Vegetables','Tomato Sauce','Garlic','Olive Oil'],active:true},
+  {id:13,name:'Denech Wat',price:400,section:'ethiopian',type:'fasting',desc:'Hearty potato stew seasoned with turmeric and herbs',ingredients:['Potatoes','Turmeric','Onions','Garlic','Herbs','Injera'],active:true},
+  {id:14,name:'Ruz Besoya',price:370,section:'ethiopian',type:'fasting',desc:'Rice with flavorful meat sauce and aromatic spices',ingredients:['Rice','Meat Sauce','Spices','Onions','Tomato'],active:true},
+  {id:15,name:'Tegabino',price:500,section:'ethiopian',type:'fasting',desc:'Traditional thick bean and grain stew, rich and filling',ingredients:['Beans','Grains','Berbere','Onions','Garlic','Injera'],active:true},
+  {id:16,name:'Chicken Burger',price:1040,section:'international',type:'non-fasting',subsection:'burgers',desc:'Crispy chicken patty with lettuce, tomato, and mayo',ingredients:['Chicken Patty','Lettuce','Tomato','Mayo','Burger Bun','Fries'],active:true},
+  {id:17,name:'Beef Burger',price:1105,section:'international',type:'non-fasting',subsection:'burgers',desc:'Classic beef patty with lettuce, tomato, and onions',ingredients:['Beef Patty','Lettuce','Tomato','Onions','Burger Bun','Fries'],active:true},
+  {id:18,name:'Cheese Burger',price:1170,section:'international',type:'non-fasting',subsection:'burgers',desc:'Beef patty topped with melted cheddar cheese',ingredients:['Beef Patty','Cheddar Cheese','Lettuce','Tomato','Burger Bun','Fries'],active:true},
+  {id:19,name:'Double Cheese Burger',price:1430,section:'international',type:'non-fasting',subsection:'burgers',desc:'Two beef patties with double cheddar cheese',ingredients:['2x Beef Patties','Double Cheddar','Lettuce','Tomato','Burger Bun','Fries'],active:true},
+  {id:20,name:"Yaya's Special Burger",price:1560,section:'international',type:'non-fasting',subsection:'burgers',desc:'Signature beef patty with caramelized onions, bacon, and special sauce',ingredients:['Beef Patty','Bacon','Caramelized Onions','Special Sauce','Burger Bun','Fries'],active:true},
+  {id:21,name:"Yaya's Double Special",price:1950,section:'international',type:'non-fasting',subsection:'burgers',desc:'Double the patty, double the cheese – our ultimate burger',ingredients:['2x Beef Patties','Double Cheddar','Bacon','Special Sauce','Burger Bun','Fries'],active:true},
+  {id:22,name:'Margherita Pizza',price:1170,section:'international',type:'non-fasting',subsection:'pizzas',desc:'Classic tomato sauce, mozzarella, and fresh basil',ingredients:['Tomato Sauce','Mozzarella','Fresh Basil','Olive Oil','Pizza Dough'],active:true},
+  {id:23,name:'Chicken Pizza',price:1430,section:'international',type:'non-fasting',subsection:'pizzas',desc:'Topped with grilled chicken, bell peppers, and mozzarella',ingredients:['Grilled Chicken','Bell Peppers','Mozzarella','Tomato Sauce','Pizza Dough'],active:true},
+  {id:24,name:'Beef Pizza',price:1430,section:'international',type:'non-fasting',subsection:'pizzas',desc:'Seasoned beef with onions, olives, and melted cheese',ingredients:['Seasoned Beef','Onions','Olives','Mozzarella','Pizza Dough'],active:true},
+  {id:25,name:'Tuna Pizza',price:1300,section:'international',type:'non-fasting',subsection:'pizzas',desc:'Tuna, onions, olives, and mozzarella on crispy crust',ingredients:['Tuna','Onions','Olives','Mozzarella','Tomato Sauce','Pizza Dough'],active:true},
+  {id:26,name:"Yaya's Special Pizza",price:1820,section:'international',type:'non-fasting',subsection:'pizzas',desc:'Our signature pizza loaded with chicken, beef, veggies, and extra cheese',ingredients:['Chicken','Beef','Mixed Veggies','Extra Cheese','Special Sauce','Pizza Dough'],active:true},
+  {id:27,name:'Chicken Mofo',price:1250,section:'international',type:'non-fasting',subsection:'chickens',desc:'Crispy fried chicken pieces with spicy dipping sauce',ingredients:['Chicken Pieces','Flour Coating','Spices','Dipping Sauce','Fries'],active:true},
+  {id:28,name:'Grilled Chicken',price:1560,section:'international',type:'non-fasting',subsection:'chickens',desc:'Marinated chicken breast grilled to perfection, served with rice',ingredients:['Chicken Breast','Herb Marinade','Rice','Grilled Vegetables'],active:true},
+  {id:29,name:'Chicken Wings',price:1100,section:'international',type:'non-fasting',subsection:'chickens',desc:"Crispy wings tossed in Yaya's signature hot sauce",ingredients:['Chicken Wings','Hot Sauce','Butter','Blue Cheese Dip','Celery'],active:true},
+  {id:30,name:'Chicken Rice',price:1300,section:'international',type:'non-fasting',subsection:'chickens',desc:'Tender chicken pieces stir-fried with seasoned rice and vegetables',ingredients:['Chicken','Rice','Mixed Vegetables','Soy Sauce','Spices'],active:true},
+  {id:31,name:"Yaya's Special Combo",price:2080,section:'international',type:'non-fasting',subsection:'chickens',desc:'Grilled chicken, wings, fries, and coleslaw – the full experience',ingredients:['Grilled Chicken','Chicken Wings','Fries','Coleslaw','Dipping Sauces'],active:true},
+  {id:32,name:'Samosa',price:585,section:'international',type:'fasting',desc:'Crispy pastry filled with spiced potatoes and peas',ingredients:['Potatoes','Peas','Spices','Pastry Dough','Oil'],active:true},
+  {id:33,name:'Spring Rolls',price:650,section:'international',type:'fasting',desc:'Lightly fried rolls stuffed with vegetables and glass noodles',ingredients:['Mixed Vegetables','Glass Noodles','Spring Roll Wrappers','Soy Sauce','Oil'],active:true},
+  {id:34,name:'Veggie Pizza',price:1300,section:'international',type:'fasting',desc:'Thin-crust pizza topped with fresh seasonal vegetables and mozzarella',ingredients:['Seasonal Vegetables','Mozzarella','Tomato Sauce','Pizza Dough'],active:true},
+  {id:35,name:'Fruit Salad',price:585,section:'international',type:'fasting',desc:'Fresh seasonal fruits drizzled with honey and lime',ingredients:['Seasonal Fruits','Honey','Lime Juice','Mint'],active:true},
+  {id:67,name:'Vegetable Pizza',price:700,section:'international',type:'fasting',subsection:'pizzas',desc:'Thin-crust pizza loaded with fresh seasonal vegetables and cheese',ingredients:['Seasonal Vegetables','Mozzarella','Tomato Sauce','Pizza Dough'],active:true},
+  {id:68,name:'Chicken Burrito',price:900,section:'international',type:'non-fasting',subsection:'burritos',desc:'Flour tortilla filled with seasoned chicken, rice, beans, and cheese',ingredients:['Chicken','Rice','Beans','Cheese','Flour Tortilla','Sour Cream'],active:true},
+  {id:69,name:'Beef Burrito',price:870,section:'international',type:'non-fasting',subsection:'burritos',desc:'Hearty beef burrito with rice, beans, and melted cheese',ingredients:['Beef','Rice','Beans','Cheese','Flour Tortilla','Salsa'],active:true},
+  {id:70,name:'Veggie Burrito',price:700,section:'international',type:'fasting',subsection:'burritos',desc:'Fresh vegetable burrito with rice, beans, and guacamole',ingredients:['Mixed Vegetables','Rice','Beans','Guacamole','Flour Tortilla'],active:true},
+  {id:71,name:"Yaya's Special Burrito",price:1100,section:'international',type:'non-fasting',subsection:'burritos',desc:'Our signature burrito loaded with chicken, beef, and all the fixings',ingredients:['Chicken','Beef','Rice','Beans','Cheese','Guacamole','Sour Cream','Flour Tortilla'],active:true},
+  {id:36,name:'Macchiato',price:130,section:'hot-drinks',type:null,desc:'Espresso with a touch of steamed milk',ingredients:['Espresso','Steamed Milk'],active:true},
+  {id:37,name:'Ethiopian Coffee',price:60,section:'hot-drinks',type:null,desc:'Traditional coffee ceremony style, rich and aromatic',ingredients:['Ethiopian Coffee Beans','Water','Sugar (optional)'],active:true},
+  {id:38,name:'Spiced Tea',price:120,section:'hot-drinks',type:null,desc:'Aromatic black tea with cardamom, cinnamon, and cloves',ingredients:['Black Tea','Cardamom','Cinnamon','Cloves','Honey'],active:true},
+  {id:39,name:'Tea',price:60,section:'hot-drinks',type:null,desc:'Premium black or herbal tea',ingredients:['Tea Leaves','Hot Water','Sugar (optional)'],active:true},
+  {id:40,name:'Avocado Juice',price:350,section:'cold-drinks',type:null,subsection:'juices',desc:'Creamy fresh avocado blended with milk and sugar',ingredients:['Avocado','Milk','Sugar','Vanilla'],active:true},
+  {id:41,name:'Mango Juice',price:300,section:'cold-drinks',type:null,subsection:'juices',desc:'Sweet ripe mango blended to perfection',ingredients:['Ripe Mango','Milk','Sugar','Ice'],active:true},
+  {id:42,name:'Pineapple Juice',price:390,section:'cold-drinks',type:null,subsection:'juices',desc:'Refreshing pineapple juice with a hint of lime',ingredients:['Pineapple','Lime','Sugar','Ice'],active:true},
+  {id:43,name:'Orange Juice',price:390,section:'cold-drinks',type:null,subsection:'juices',desc:'Freshly squeezed orange juice',ingredients:['Fresh Oranges','Sugar (optional)','Ice'],active:true},
+  {id:44,name:"Yaya's Special Juice",price:585,section:'cold-drinks',type:null,subsection:'juices',desc:'Our signature blend of tropical fruits and berries',ingredients:['Tropical Fruits','Berries','Honey','Ice'],active:true},
+  {id:45,name:'Strawberry Milkshake',price:585,section:'cold-drinks',type:null,subsection:'milkshakes',desc:'Creamy strawberry milkshake topped with whipped cream',ingredients:['Strawberries','Vanilla Ice Cream','Milk','Whipped Cream'],active:true},
+  {id:46,name:'Chocolate Milkshake',price:585,section:'cold-drinks',type:null,subsection:'milkshakes',desc:'Rich chocolate milkshake with a fudge swirl',ingredients:['Chocolate Ice Cream','Milk','Chocolate Fudge','Whipped Cream'],active:true},
+  {id:47,name:'Vanilla Milkshake',price:520,section:'cold-drinks',type:null,subsection:'milkshakes',desc:'Classic vanilla milkshake made with real vanilla bean',ingredients:['Vanilla Ice Cream','Milk','Vanilla Bean','Whipped Cream'],active:true},
+  {id:48,name:'Banana Milkshake',price:585,section:'cold-drinks',type:null,subsection:'milkshakes',desc:'Smooth banana milkshake with a touch of cinnamon',ingredients:['Banana','Vanilla Ice Cream','Milk','Cinnamon','Whipped Cream'],active:true},
+  {id:49,name:'Oreo Milkshake',price:650,section:'cold-drinks',type:null,subsection:'milkshakes',desc:'Crushed Oreo cookies blended in creamy vanilla milkshake',ingredients:['Oreo Cookies','Vanilla Ice Cream','Milk','Whipped Cream'],active:true},
+  {id:50,name:"Yaya's Special Shake",price:715,section:'cold-drinks',type:null,subsection:'milkshakes',desc:'Our signature mix of chocolate, caramel, and brownie bits',ingredients:['Chocolate','Caramel','Brownie Bits','Ice Cream','Milk','Whipped Cream'],active:true},
+  {id:51,name:'Mixed Berry Smoothie',price:585,section:'cold-drinks',type:null,subsection:'smoothies',desc:'Blend of strawberries, blueberries, and raspberries with yogurt',ingredients:['Strawberries','Blueberries','Raspberries','Yogurt','Honey'],active:true},
+  {id:52,name:'Tropical Smoothie',price:585,section:'cold-drinks',type:null,subsection:'smoothies',desc:'Mango, pineapple, and coconut blended with yogurt',ingredients:['Mango','Pineapple','Coconut Milk','Yogurt','Honey'],active:true},
+  {id:53,name:'Green Smoothie',price:520,section:'cold-drinks',type:null,subsection:'smoothies',desc:'Spinach, banana, apple, and ginger – healthy and refreshing',ingredients:['Spinach','Banana','Apple','Ginger','Lime'],active:true},
+  {id:54,name:'Peanut Butter Smoothie',price:650,section:'cold-drinks',type:null,subsection:'smoothies',desc:'Creamy peanut butter, banana, and chocolate protein blend',ingredients:['Peanut Butter','Banana','Chocolate Protein','Milk','Honey'],active:true},
+  {id:55,name:'Mango Smoothie',price:585,section:'cold-drinks',type:null,subsection:'smoothies',desc:'Fresh mango blended with yogurt and a hint of honey',ingredients:['Mango','Yogurt','Honey','Ice'],active:true},
+  {id:56,name:'Classic Mojito',price:585,section:'cold-drinks',type:null,subsection:'mojitos',desc:'Traditional Cuban mojito with fresh mint and lime',ingredients:['White Rum','Fresh Mint','Lime','Sugar','Soda Water','Ice'],active:true},
+  {id:57,name:'Strawberry Mojito',price:650,section:'cold-drinks',type:null,subsection:'mojitos',desc:'Sweet strawberry twist on the classic mojito',ingredients:['White Rum','Fresh Strawberries','Mint','Lime','Sugar','Soda Water','Ice'],active:true},
+  {id:58,name:'Mango Mojito',price:650,section:'cold-drinks',type:null,subsection:'mojitos',desc:'Tropical mango purée meets refreshing mojito',ingredients:['White Rum','Mango Purée','Mint','Lime','Sugar','Soda Water','Ice'],active:true},
+  {id:59,name:'Passion Fruit Mojito',price:715,section:'cold-drinks',type:null,subsection:'mojitos',desc:'Tangy passion fruit with cool mint and lime',ingredients:['White Rum','Passion Fruit','Mint','Lime','Sugar','Soda Water','Ice'],active:true},
+  {id:60,name:'Blueberry Mojito',price:650,section:'cold-drinks',type:null,subsection:'mojitos',desc:'Muddled blueberries with classic mojito freshness',ingredients:['White Rum','Blueberries','Mint','Lime','Sugar','Soda Water','Ice'],active:true},
+  {id:61,name:'Watermelon Mojito',price:650,section:'cold-drinks',type:null,subsection:'mojitos',desc:'Juicy watermelon blended into a refreshing mojito',ingredients:['White Rum','Watermelon Purée','Mint','Lime','Sugar','Soda Water','Ice'],active:true},
+  {id:62,name:"Yaya's Special Mojito",price:780,section:'cold-drinks',type:null,subsection:'mojitos',desc:'Our signature mojito with triple fruit blend and a secret twist',ingredients:['White Rum','Triple Fruit Blend','Mint','Lime','Secret Syrup','Soda Water','Ice'],active:true},
+  {id:63,name:'Soda',price:90,section:'cold-drinks',type:null,subsection:'soft-drinks',desc:'Choice of Coca-Cola, Sprite, Fanta, or Pepsi',ingredients:['Carbonated Water','Sugar','Flavoring'],active:true},
+  {id:64,name:'Bottled Water',price:120,section:'cold-drinks',type:null,subsection:'soft-drinks',desc:'Pure, refreshing bottled water',ingredients:['Purified Water','Electrolytes'],active:true},
+  {id:65,name:'Energy Drink',price:390,section:'cold-drinks',type:null,subsection:'soft-drinks',desc:'Choice of Red Bull or Monster',ingredients:['Caffeine','Taurine','B Vitamins','Carbonated Water','Sugar'],active:true},
+  {id:66,name:'Sparkling Water',price:195,section:'cold-drinks',type:null,subsection:'soft-drinks',desc:'Refreshing carbonated mineral water',ingredients:['Carbonated Water','Natural Minerals'],active:true}
 ];
 
 /* ── DATA ABSTRACTION LAYER ── */
@@ -84,7 +84,12 @@ function lsLoad(key, fallback) {
 }
 
 function lsSave(key, data) {
-  localStorage.setItem(key, JSON.stringify(data));
+  try {
+    localStorage.setItem(key, JSON.stringify(data));
+  } catch (e) {
+    // Local storage is only a cache here; never let a quota error block a database save.
+    console.warn('Could not cache menu data in localStorage:', e);
+  }
 }
 
 async function loadMenuData() {
@@ -170,6 +175,7 @@ const dashTotalStaff = document.getElementById('dashTotalStaff');
 const dashPendingStaff = document.getElementById('dashPendingStaff');
 const dashCategories = document.getElementById('dashCategories');
 const dashDbPrompt = document.getElementById('dashDbPrompt');
+const dashActiveItems = document.getElementById('dashActiveItems');
 
 const menuTableBody = document.getElementById('menuTableBody');
 const itemCount = document.getElementById('itemCount');
@@ -199,6 +205,28 @@ const itemIngredients = document.getElementById('itemIngredients');
 const dbConfigForm = document.getElementById('dbConfigForm');
 const testDbBtn = document.getElementById('testDbBtn');
 const dbConfigStatus = document.getElementById('dbConfigStatus');
+
+const categoryStatusGrid = document.getElementById('categoryStatusGrid');
+
+/* ─── ITEM IMAGE REFS ─── */
+const itemImageFile = document.getElementById('itemImageFile');
+const itemImagePick = document.getElementById('itemImagePick');
+const itemImageRemove = document.getElementById('itemImageRemove');
+const itemImagePreview = document.getElementById('itemImagePreview');
+const itemImagePlaceholder = document.getElementById('itemImagePlaceholder');
+const itemImageStatus = document.getElementById('itemImageStatus');
+const itemImagePosition = document.getElementById('itemImagePosition');
+const itemImagePositionWrap = document.getElementById('itemImagePositionWrap');
+const itemFormError = document.getElementById('itemFormError');
+const saveItemBtn = document.getElementById('saveItemBtn');
+
+/* Image state for the item currently open in the modal */
+let pendingImageData = null;
+let pendingImageDirty = false;
+let editingHasImage = false;
+let imageProcessing = false;
+let imageLoadToken = 0;
+const itemImageCache = new Map();
 
 /* ─── AUTH WITH FIREBASE ─── */
 function showLoginForm() {
@@ -329,7 +357,7 @@ function navigateTo(page) {
   pageTitle.textContent = titles[page] || 'Dashboard';
 
   if (page === 'dashboard') renderDashboard();
-  else if (page === 'menu') renderTable();
+  else if (page === 'menu') { renderTable(); renderCategoryStatus(); }
   else if (page === 'staff') renderStaffTable();
   else if (page === 'settings') loadSettingsForm();
 
@@ -446,8 +474,10 @@ async function renderDashboard() {
   menuData = await loadMenuData();
   const staff = await fbLoadCollection('staff') || [];
   const sections = [...new Set(menuData.map(i => i.section))];
+  const activeItems = menuData.filter(i => i.active !== false).length;
 
   dashTotalItems.textContent = menuData.length;
+  dashActiveItems.textContent = activeItems;
   dashTotalStaff.textContent = staff.filter(s => s.role === 'staff' || s.role === 'manager').length;
   dashPendingStaff.textContent = staff.filter(s => s.role === 'pending').length;
   dashCategories.textContent = sections.length;
@@ -608,6 +638,227 @@ async function deleteStaff(uid) {
   renderStaffTable();
 }
 
+/* ─── CATEGORY STATUS ─── */
+function renderCategoryStatus() {
+  if (!categoryStatusGrid) return;
+  const sections = ['ethiopian', 'international', 'hot-drinks', 'cold-drinks'];
+  const sectionIcons = {
+    ethiopian: '&#127835;',
+    international: '&#127828;',
+    'hot-drinks': '&#9749;',
+    'cold-drinks': '&#129380;'
+  };
+
+  categoryStatusGrid.innerHTML = sections.map(section => {
+    const items = menuData.filter(i => i.section === section);
+    const activeCount = items.filter(i => i.active !== false).length;
+    const totalCount = items.length;
+    const allActive = activeCount === totalCount;
+    const allInactive = activeCount === 0;
+
+    return `<div class="cat-status-card ${allInactive ? 'cat-inactive' : ''}">
+      <div class="cat-status-header">
+        <span class="cat-status-icon">${sectionIcons[section]}</span>
+        <div class="cat-status-info">
+          <h4>${sectionLabels[section]}</h4>
+          <span class="cat-status-count">${activeCount} / ${totalCount} items active</span>
+        </div>
+        <label class="admin-toggle">
+          <input type="checkbox" data-section="${section}" ${allActive ? 'checked' : ''} onchange="toggleCategory('${section}', this.checked)">
+          <span class="admin-toggle-slider"></span>
+        </label>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function toggleCategory(section, active) {
+  const changed = menuData.filter(item => item.section === section);
+  const previous = changed.map(item => item.active);
+  changed.forEach(item => { item.active = active; });
+
+  try {
+    if (isFirebaseConfigured()) {
+      const saved = await fbSaveCollection('menuItems', changed);
+      if (!saved) throw new Error('save failed');
+    }
+    lsSave(MENU_KEY, menuData);
+  } catch (err) {
+    changed.forEach((item, index) => { item.active = previous[index]; });
+    alert('Could not update this category. Check your connection and try again.');
+  }
+
+  renderCategoryStatus();
+  renderTable();
+}
+
+/* ─── ITEM BACKGROUND IMAGES ─── */
+const IMAGE_MAX_EDGE = 1200;
+// Firestore allows 1 MiB per document. Keeping the data URL under ~300k chars
+// (roughly 220 KB of JPEG) leaves plenty of headroom and keeps menu loads light.
+const IMAGE_MAX_DATA_URL = 300000;
+const IMAGE_POSITIONS = ['center', 'top', 'bottom'];
+
+function loadImageElement(file) {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => { URL.revokeObjectURL(url); resolve(img); };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error('Could not read that image. Try a JPG, PNG or WebP file.'));
+    };
+    img.src = url;
+  });
+}
+
+function dataUrlBytes(dataUrl) {
+  const comma = dataUrl.indexOf(',');
+  const base64 = comma === -1 ? dataUrl : dataUrl.slice(comma + 1);
+  return Math.round((base64.length * 3) / 4);
+}
+
+function formatBytes(bytes) {
+  if (bytes < 1024) return bytes + ' B';
+  if (bytes < 1024 * 1024) return Math.round(bytes / 1024) + ' KB';
+  return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+}
+
+async function compressImageForMenu(file) {
+  if (!file.type || !file.type.startsWith('image/')) {
+    throw new Error('Please choose an image file (JPG, PNG, WebP or GIF).');
+  }
+  if (file.size > 25 * 1024 * 1024) {
+    throw new Error('That image is larger than 25 MB. Please choose a smaller file.');
+  }
+
+  const img = await loadImageElement(file);
+  let edge = IMAGE_MAX_EDGE;
+  let quality = 0.84;
+  let dataUrl = '';
+
+  for (let attempt = 0; attempt < 8; attempt++) {
+    const scale = Math.min(1, edge / Math.max(img.naturalWidth, img.naturalHeight));
+    const width = Math.max(1, Math.round(img.naturalWidth * scale));
+    const height = Math.max(1, Math.round(img.naturalHeight * scale));
+
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d');
+    // JPEG has no alpha channel, so flatten transparency onto the menu's cream tone.
+    ctx.fillStyle = '#fffcf5';
+    ctx.fillRect(0, 0, width, height);
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(img, 0, 0, width, height);
+
+    dataUrl = canvas.toDataURL('image/jpeg', quality);
+    if (dataUrl.length <= IMAGE_MAX_DATA_URL) return dataUrl;
+
+    quality = Math.round((quality - 0.12) * 100) / 100;
+    if (quality < 0.55) {
+      edge = Math.round(edge * 0.8);
+      quality = 0.72;
+    }
+  }
+
+  throw new Error('This image could not be compressed enough. Please choose a smaller photo.');
+}
+
+function setImageStatus(text, type) {
+  itemImageStatus.textContent = text || '';
+  itemImageStatus.className = 'admin-image-status' + (type ? ' ' + type : '');
+}
+
+function renderImagePreview() {
+  if (pendingImageData) {
+    itemImagePreview.style.backgroundImage = `url("${pendingImageData}")`;
+    itemImagePreview.classList.add('has-image');
+    if (itemImagePlaceholder) itemImagePlaceholder.style.display = 'none';
+    itemImageRemove.style.display = '';
+    itemImagePositionWrap.style.display = 'flex';
+  } else {
+    itemImagePreview.style.backgroundImage = '';
+    itemImagePreview.classList.remove('has-image');
+    if (itemImagePlaceholder) itemImagePlaceholder.style.display = '';
+    itemImageRemove.style.display = 'none';
+    itemImagePositionWrap.style.display = 'none';
+  }
+}
+
+async function handleImageFile(file) {
+  if (!file) return;
+  itemFormError.textContent = '';
+  setImageStatus('Processing image…');
+  imageProcessing = true;
+  itemImagePick.disabled = true;
+  saveItemBtn.disabled = true;
+
+  try {
+    const dataUrl = await compressImageForMenu(file);
+    pendingImageData = dataUrl;
+    pendingImageDirty = true;
+    editingHasImage = true;
+    renderImagePreview();
+    setImageStatus(`Ready · ${formatBytes(dataUrlBytes(dataUrl))} · saved with the item`, 'success');
+  } catch (err) {
+    setImageStatus(err.message, 'error');
+  } finally {
+    imageProcessing = false;
+    itemImagePick.disabled = false;
+    saveItemBtn.disabled = false;
+    itemImageFile.value = '';
+  }
+}
+
+async function loadItemImage(id) {
+  if (itemImageCache.has(id)) return itemImageCache.get(id);
+  if (typeof fbGetItemImage === 'undefined') return null;
+  try {
+    const data = await fbGetItemImage(id);
+    itemImageCache.set(id, data);
+    return data;
+  } catch (e) {
+    return null;
+  }
+}
+
+let thumbObserver = null;
+
+async function hydrateThumb(el) {
+  const id = Number(el.dataset.thumbId);
+  const data = await loadItemImage(id);
+  if (data) {
+    el.style.backgroundImage = `url("${data}")`;
+    el.classList.add('admin-thumb-loaded');
+    el.textContent = '';
+  } else {
+    el.textContent = '—';
+    el.classList.add('admin-thumb-missing');
+  }
+}
+
+function observeThumbs() {
+  const thumbs = menuTableBody.querySelectorAll('[data-thumb-id]');
+  if (!thumbs.length) return;
+
+  if (!('IntersectionObserver' in window)) {
+    thumbs.forEach(hydrateThumb);
+    return;
+  }
+
+  if (thumbObserver) thumbObserver.disconnect();
+  thumbObserver = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      obs.unobserve(entry.target);
+      hydrateThumb(entry.target);
+    });
+  }, { rootMargin: '250px' });
+  thumbs.forEach(el => thumbObserver.observe(el));
+}
+
 /* ─── MENU CRUD ─── */
 function getNextId() {
   return menuData.length > 0 ? Math.max(...menuData.map(i => i.id)) + 1 : 1;
@@ -641,13 +892,28 @@ function renderTable() {
     const typeLabel = item.type ? (item.type === 'fasting' ? 'ጾም' : 'የፍስክ') : '—';
     const subLabel = item.subsection ? (subsectionLabels[item.subsection] || item.subsection) : '—';
     const ingredientsStr = item.ingredients.join(', ');
-    return `<tr>
+    const isActive = item.active !== false;
+    const hasImg = !!(item.hasImage || item.image);
+    return `<tr class="${isActive ? '' : 'row-inactive'}">
       <td class="col-id">${item.id}</td>
-      <td class="col-name">${escHtml(item.name)}</td>
+      <td class="col-name">
+        <div class="admin-name-cell">
+          ${hasImg
+            ? `<span class="admin-thumb" data-thumb-id="${item.id}" aria-hidden="true"></span>`
+            : `<span class="admin-thumb admin-thumb-empty" aria-hidden="true">—</span>`}
+          <span class="admin-name-text">${escHtml(item.name)}</span>
+        </div>
+      </td>
       <td>${item.price}</td>
       <td>${sectionLabel}</td>
       <td>${typeLabel}</td>
       <td>${subLabel}</td>
+      <td class="col-status">
+        <label class="admin-toggle admin-toggle-sm">
+          <input type="checkbox" data-toggle-id="${item.id}" ${isActive ? 'checked' : ''} onchange="toggleItemActive(${item.id}, this.checked)">
+          <span class="admin-toggle-slider"></span>
+        </label>
+      </td>
       <td class="col-desc">${escHtml(item.desc)}</td>
       <td class="col-ingredients">${escHtml(ingredientsStr)}</td>
       <td class="col-actions">
@@ -663,6 +929,29 @@ function renderTable() {
   document.querySelectorAll('.admin-btn-delete').forEach(btn => {
     btn.addEventListener('click', () => deleteItem(Number(btn.dataset.id)));
   });
+
+  observeThumbs();
+}
+
+async function toggleItemActive(id, active) {
+  const item = menuData.find(i => i.id === id);
+  if (!item) return;
+  const previous = item.active;
+  item.active = active;
+
+  try {
+    if (isFirebaseConfigured()) {
+      const saved = await fbSaveDoc('menuItems', id, item);
+      if (!saved) throw new Error('save failed');
+    }
+    lsSave(MENU_KEY, menuData);
+  } catch (err) {
+    item.active = previous;
+    alert('Could not update this item. Check your connection and try again.');
+  }
+
+  renderTable();
+  renderCategoryStatus();
 }
 
 function escHtml(str) {
@@ -682,6 +971,14 @@ function openAddModal() {
   modalTitle.textContent = 'Add New Item';
   editId.value = '';
   itemForm.reset();
+  pendingImageData = null;
+  pendingImageDirty = false;
+  editingHasImage = false;
+  imageLoadToken++;
+  itemImagePosition.value = 'center';
+  renderImagePreview();
+  setImageStatus('');
+  itemFormError.textContent = '';
   itemModal.style.display = 'flex';
 }
 
@@ -697,8 +994,61 @@ function openEditModal(id) {
   itemSubsection.value = item.subsection || '';
   itemDesc.value = item.desc;
   itemIngredients.value = item.ingredients.join(', ');
+  itemImagePosition.value = IMAGE_POSITIONS.includes(item.imagePosition) ? item.imagePosition : 'center';
+
+  pendingImageData = item.image || null;
+  pendingImageDirty = false;
+  editingHasImage = !!(item.hasImage || item.image);
+  renderImagePreview();
+  setImageStatus(editingHasImage && !pendingImageData ? 'Loading image…' : '');
+  itemFormError.textContent = '';
   itemModal.style.display = 'flex';
+
+  if (editingHasImage && !pendingImageData) {
+    const token = ++imageLoadToken;
+    loadItemImage(id).then(data => {
+      if (token !== imageLoadToken || editId.value !== String(id)) return;
+      if (data) {
+        pendingImageData = data;
+        setImageStatus('Current image', 'success');
+      } else {
+        setImageStatus('Image could not be loaded. You can choose a new one.', 'error');
+      }
+      renderImagePreview();
+    });
+  } else {
+    imageLoadToken++;
+  }
 }
+
+itemImagePick.addEventListener('click', () => itemImageFile.click());
+itemImagePreview.addEventListener('click', () => itemImageFile.click());
+itemImageFile.addEventListener('change', () => handleImageFile(itemImageFile.files[0]));
+
+itemImageRemove.addEventListener('click', () => {
+  pendingImageData = null;
+  pendingImageDirty = true;
+  editingHasImage = false;
+  renderImagePreview();
+  setImageStatus('Image will be removed when you save.', '');
+});
+
+['dragenter', 'dragover'].forEach(evt => {
+  itemImagePreview.addEventListener(evt, (e) => {
+    e.preventDefault();
+    itemImagePreview.classList.add('drag-over');
+  });
+});
+['dragleave', 'drop'].forEach(evt => {
+  itemImagePreview.addEventListener(evt, (e) => {
+    e.preventDefault();
+    itemImagePreview.classList.remove('drag-over');
+  });
+});
+itemImagePreview.addEventListener('drop', (e) => {
+  const file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+  if (file) handleImageFile(file);
+});
 
 function closeModal() { itemModal.style.display = 'none'; }
 
@@ -708,36 +1058,99 @@ itemModal.addEventListener('click', (e) => { if (e.target === itemModal) closeMo
 
 itemForm.addEventListener('submit', async (e) => {
   e.preventDefault();
-  const id = editId.value ? Number(editId.value) : getNextId();
+  itemFormError.textContent = '';
+
+  if (imageProcessing) {
+    itemFormError.textContent = 'Please wait for the image to finish processing.';
+    return;
+  }
+
+  const isEdit = !!editId.value;
+  const id = isEdit ? Number(editId.value) : getNextId();
   const ingredients = itemIngredients.value.split(',').map(s => s.trim()).filter(s => s);
 
+  const existingItem = isEdit ? menuData.find(i => i.id === id) : null;
   const item = {
     id, name: itemName.value.trim(), price: Number(itemPrice.value),
     section: itemSection.value, type: itemType.value || null,
     subsection: itemSubsection.value || undefined,
-    desc: itemDesc.value.trim(), ingredients
+    desc: itemDesc.value.trim(), ingredients,
+    active: existingItem ? existingItem.active : true
   };
   if (item.subsection === undefined) delete item.subsection;
 
-  if (editId.value) {
-    const idx = menuData.findIndex(i => i.id === Number(editId.value));
-    if (idx !== -1) menuData[idx] = item;
-  } else {
-    menuData.push(item);
+  // Older items stored the image inline. Move it into menuImages on save so
+  // the (possibly large) data URL stops living inside the menu document.
+  const legacyInlineImage = !!(existingItem && existingItem.image && !existingItem.hasImage);
+
+  if (pendingImageData || (!pendingImageDirty && editingHasImage)) {
+    item.hasImage = true;
+    item.imagePosition = IMAGE_POSITIONS.includes(itemImagePosition.value) ? itemImagePosition.value : 'center';
   }
 
-  closeModal();
-  await saveMenuData(menuData);
-  renderTable();
+  saveItemBtn.disabled = true;
+  saveItemBtn.textContent = 'Saving…';
+
+  try {
+    // Save a new/changed image first, so an item is never published with a
+    // `hasImage` flag that points at a missing image document.
+    if (pendingImageData && (pendingImageDirty || legacyInlineImage)) {
+      const imageSaved = await fbSaveItemImage(id, pendingImageData);
+      if (!imageSaved) {
+        throw new Error('Could not save the image. Check your connection and try a slightly smaller photo.');
+      }
+      itemImageCache.set(id, pendingImageData);
+    }
+
+    if (isFirebaseConfigured()) {
+      const itemSaved = await fbSaveDoc('menuItems', id, item);
+      if (!itemSaved) {
+        throw new Error('Could not save this item to the database. Please try again.');
+      }
+    }
+
+    // Remove the image document only after the item no longer references it.
+    if (pendingImageDirty && !pendingImageData) {
+      await fbDeleteItemImage(id);
+      itemImageCache.set(id, null);
+    }
+
+    const idx = menuData.findIndex(i => i.id === id);
+    if (idx !== -1) menuData[idx] = item;
+    else menuData.push(item);
+    lsSave(MENU_KEY, menuData);
+
+    closeModal();
+    renderTable();
+    renderCategoryStatus();
+  } catch (err) {
+    itemFormError.textContent = err.message;
+  } finally {
+    saveItemBtn.disabled = false;
+    saveItemBtn.textContent = 'Save Item';
+  }
 });
 
 async function deleteItem(id) {
   const item = menuData.find(i => i.id === id);
   if (!item) return;
   if (!confirm(`Delete "${item.name}"? This cannot be undone.`)) return;
-  menuData = menuData.filter(i => i.id !== id);
-  await saveMenuData(menuData);
-  renderTable();
+
+  try {
+    if (isFirebaseConfigured()) {
+      const deleted = await fbDeleteDoc('menuItems', id);
+      if (!deleted) throw new Error('delete failed');
+      if (item.hasImage || item.image) await fbDeleteItemImage(id);
+    }
+    menuData = menuData.filter(i => i.id !== id);
+    itemImageCache.delete(id);
+
+    lsSave(MENU_KEY, menuData);
+    renderTable();
+    renderCategoryStatus();
+  } catch (err) {
+    alert('Could not delete this item. Check your connection and try again.');
+  }
 }
 
 exportBtn.addEventListener('click', () => {

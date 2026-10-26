@@ -149,7 +149,8 @@ async function fbSaveCollection(collectionName, items) {
 
     items.forEach(item => {
       const d = doc(colRef, String(item.id));
-      batch.set(d, item);
+      const { _id, ...payload } = item;
+      batch.set(d, payload);
     });
 
     await batch.commit();
@@ -188,7 +189,8 @@ async function fbSaveDoc(collectionName, id, data) {
   }
   try {
     const { collection, doc, setDoc } = window._firebaseFirestore;
-    await setDoc(doc(collection(firestoreDb, collectionName), String(id)), data);
+    const { _id, ...payload } = data || {};
+    await setDoc(doc(collection(firestoreDb, collectionName), String(id)), payload);
     return true;
   } catch (e) {
     console.error(`FB save doc:`, e);
@@ -222,4 +224,27 @@ async function fbDeleteDoc(collectionName, id) {
     console.error(`FB delete doc:`, e);
     return false;
   }
+}
+
+/* ── MENU ITEM BACKGROUND IMAGES ──
+   The project runs on the Firebase Spark plan, so Cloud Storage is not
+   available. Images are compressed in the browser and stored as data URLs
+   in a small companion collection instead. Menu items only keep a
+   `hasImage` flag, which keeps menu documents tiny. */
+async function fbSaveItemImage(itemId, dataUrl) {
+  if (!dataUrl) return false;
+  return fbSaveDoc('menuImages', itemId, {
+    itemId: Number(itemId),
+    image: dataUrl,
+    updatedAt: Date.now()
+  });
+}
+
+async function fbGetItemImage(itemId) {
+  const imageDoc = await fbGetDoc('menuImages', itemId);
+  return imageDoc && typeof imageDoc.image === 'string' ? imageDoc.image : null;
+}
+
+async function fbDeleteItemImage(itemId) {
+  return fbDeleteDoc('menuImages', itemId);
 }
