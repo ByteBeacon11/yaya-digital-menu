@@ -149,6 +149,20 @@ body {
   transform: scale(0.97);
 }
 
+.footer-link {
+  display: inline-block;
+  margin-top: 10px;
+  margin-left: 14px;
+  color: #d4c4b4;
+  font-size: 0.8rem;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.footer-link:hover {
+  color: #f0a050;
+}
+
 .category-nav {
   background: #fffcf5;
   padding: 15px 0;
