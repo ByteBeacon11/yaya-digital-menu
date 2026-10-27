@@ -1223,7 +1223,18 @@ let firstRenderDone = false;
 
 function hideSplash() {
   const splash = document.getElementById('splash');
-  if (splash) splash.classList.add('splash-hidden');
+  if (!splash) return;
+
+  const reveal = () => splash.classList.add('splash-hidden');
+
+  // The full stylesheet loads in the background so the welcome screen can
+  // paint immediately. Keep the splash up until those styles are applied.
+  if (window.__yayaCssReady) {
+    reveal();
+    return;
+  }
+  document.addEventListener('yaya:css-ready', reveal, { once: true });
+  setTimeout(reveal, 1500);
 }
 
 function scheduleQR() {

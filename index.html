@@ -6,10 +6,86 @@
   <meta name="color-scheme" content="light">
   <title>Yaya's House - Digital Menu</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+  <!-- Critical splash styles. Inlined so the "Welcome to Yaya's House" screen
+       paints on the first frame instead of waiting for the full stylesheet.
+       Keep these values in sync with the matching rules in css/style.css. -->
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { height: 100%; color-scheme: light; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #fcf6ed;
+      color: #3d2b1f;
+      line-height: 1.6;
+    }
+    .splash {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: linear-gradient(135deg, #f0a050, #ffb366);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .splash-content {
+      text-align: center;
+      opacity: 1;
+      transform: scale(1);
+      animation: splashPop 0.45s cubic-bezier(0.22, 0.8, 0.3, 1) both;
+    }
+    .splash-title {
+      font-size: 1.8rem;
+      font-weight: 300;
+      color: #3d2b1f;
+      margin-bottom: 8px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+    }
+    .splash-name {
+      font-size: 4rem;
+      font-weight: 800;
+      color: #fff;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15);
+      letter-spacing: 2px;
+    }
+    .splash-tagline {
+      font-size: 1.2rem;
+      color: #3d2b1f;
+      font-style: italic;
+      margin-top: 12px;
+      opacity: 0.9;
+      animation: splashFadeIn 0.35s ease 0.1s both;
+    }
+    .splash-hidden { display: none; }
+    @keyframes splashPop {
+      from { opacity: 0.5; transform: scale(0.86); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    @keyframes splashFadeIn {
+      from { opacity: 0; }
+      to { opacity: 0.9; }
+    }
+    @media (max-width: 480px) {
+      .splash-name { font-size: 2.5rem; }
+      .splash-title { font-size: 1.2rem; }
+    }
+  </style>
+
+  <script>
+    window.__yayaCssReady = false;
+    window.__markCssReady = function () {
+      if (window.__yayaCssReady) return;
+      window.__yayaCssReady = true;
+      document.dispatchEvent(new Event('yaya:css-ready'));
+    };
+  </script>
+
+  <link rel="preload" href="css/style.css" as="style" onload="this.onload=null;this.rel='stylesheet';window.__markCssReady()">
+  <noscript><link rel="stylesheet" href="css/style.css"></noscript>
   <link rel="preload" as="image" href="images/header-mobile.webp" media="(max-width: 768px)">
   <link rel="preload" as="image" href="images/header.webp" media="(min-width: 769px)">
   <link rel="preload" as="fetch" href="data/menu.json" crossorigin>
-  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <div class="splash" id="splash">
@@ -102,6 +178,6 @@
     </div>
   </footer>
 
-  <script src="js/script.js"></script>
+  <script defer src="js/script.js"></script>
 </body>
 </html>
