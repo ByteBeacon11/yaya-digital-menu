@@ -239,12 +239,12 @@ async function fbDeleteDoc(collectionName, id) {
    available. Images are compressed in the browser and stored as data URLs
    in a small companion collection instead. Menu items only keep a
    `hasImage` flag, which keeps menu documents tiny. */
-async function fbSaveItemImage(itemId, dataUrl) {
+async function fbSaveItemImage(itemId, dataUrl, updatedAt) {
   if (!dataUrl) return false;
   return fbSaveDoc('menuImages', itemId, {
     itemId: Number(itemId),
     image: dataUrl,
-    updatedAt: Date.now()
+    updatedAt: Number(updatedAt) || Date.now()
   });
 }
 

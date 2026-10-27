@@ -1,0 +1,12 @@
+{
+  "name": "yaya-digital-menu",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Static build helpers for the Yaya's House digital menu",
+  "scripts": {
+    "snapshot": "node tools/build-menu-snapshot.js"
+  },
+  "devDependencies": {
+    "sharp": "^0.34.4"
+  }
+}

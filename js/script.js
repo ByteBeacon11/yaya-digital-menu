@@ -1,24 +1,119 @@
 
-const STORAGE_KEY = 'yayaMenuData';
+/* The customer page renders from a static snapshot (data/menu.json) so the
+   menu appears without waiting for Firebase. Firestore is still the live
+   source of truth and is refreshed in the background after the first paint. */
+const SNAPSHOT_URL = 'data/menu.json';
+const SNAPSHOT_KEY = 'yayaMenuSnapshotV2';
+const REST_BASE = 'https://firestore.googleapis.com/v1/projects/yayas-house-menu/databases/(default)/documents';
+const REST_PAGE_SIZE = 300;
 
-async function loadMenuData() {
-  if (typeof isFirebaseConfigured !== 'undefined' && isFirebaseConfigured()) {
-    try {
-      const fbData = await fbLoadCollection('menuItems');
-      if (fbData && fbData.length > 0) return fbData;
-    } catch(e) {}
-  }
-  const stored = localStorage.getItem(STORAGE_KEY);
-  if (stored) {
-    try {
-      const parsed = JSON.parse(stored);
-      if (Array.isArray(parsed) && parsed.length) return parsed;
-    } catch(e) {}
-  }
+function fsValue(value) {
+  if (!value || typeof value !== 'object') return null;
+  if ('stringValue' in value) return value.stringValue;
+  if ('integerValue' in value) return Number(value.integerValue);
+  if ('doubleValue' in value) return Number(value.doubleValue);
+  if ('booleanValue' in value) return value.booleanValue;
+  if ('timestampValue' in value) return value.timestampValue;
+  if ('nullValue' in value) return null;
+  if ('arrayValue' in value) return (value.arrayValue.values || []).map(fsValue);
+  if ('mapValue' in value) return fsFields(value.mapValue.fields || {});
+  if ('referenceValue' in value) return value.referenceValue;
   return null;
 }
 
+function fsFields(fields) {
+  const out = {};
+  Object.entries(fields || {}).forEach(([key, value]) => {
+    out[key] = fsValue(value);
+  });
+  return out;
+}
+
+function fsDoc(doc) {
+  return { _id: doc.name.split('/').pop(), ...fsFields(doc.fields) };
+}
+
+function fsEncode(value) {
+  if (value === null || value === undefined) return { nullValue: null };
+  if (typeof value === 'boolean') return { booleanValue: value };
+  if (typeof value === 'number') {
+    return Number.isInteger(value) ? { integerValue: String(value) } : { doubleValue: value };
+  }
+  if (Array.isArray(value)) return { arrayValue: { values: value.map(fsEncode) } };
+  if (typeof value === 'object') return { mapValue: { fields: fsEncodeFields(value) } };
+  return { stringValue: String(value) };
+}
+
+function fsEncodeFields(obj) {
+  const fields = {};
+  Object.entries(obj || {}).forEach(([key, value]) => {
+    if (value !== undefined) fields[key] = fsEncode(value);
+  });
+  return fields;
+}
+
+/* Public Firestore REST reads need no SDK and no API key. */
+async function restList(name) {
+  const docs = [];
+  let pageToken = '';
+  do {
+    const url = `${REST_BASE}/${name}?pageSize=${REST_PAGE_SIZE}` +
+      (pageToken ? `&pageToken=${encodeURIComponent(pageToken)}` : '');
+    const res = await fetch(url, { cache: 'no-store' });
+    if (!res.ok) throw new Error(`Firestore ${name}: HTTP ${res.status}`);
+    const json = await res.json();
+    (json.documents || []).forEach(doc => docs.push(fsDoc(doc)));
+    pageToken = json.nextPageToken || '';
+  } while (pageToken);
+  return docs;
+}
+
+async function restGetDoc(name, id) {
+  const res = await fetch(`${REST_BASE}/${name}/${encodeURIComponent(id)}`, { cache: 'no-store' });
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error(`Firestore ${name}/${id}: HTTP ${res.status}`);
+  return fsDoc(await res.json());
+}
+
+async function restPatchDoc(name, id, data) {
+  const res = await fetch(`${REST_BASE}/${name}/${encodeURIComponent(id)}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ fields: fsEncodeFields(data) })
+  });
+  if (!res.ok) throw new Error(`Firestore write ${name}/${id}: HTTP ${res.status}`);
+  return true;
+}
+
+async function fetchMenuSnapshot() {
+  try {
+    const res = await fetch(SNAPSHOT_URL, { cache: 'no-cache' });
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data && Array.isArray(data.items) ? data : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+function readCachedSnapshot() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(SNAPSHOT_KEY) || 'null');
+    return parsed && Array.isArray(parsed.items) ? parsed : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+function cacheSnapshot(snapshot) {
+  try {
+    localStorage.setItem(SNAPSHOT_KEY, JSON.stringify(snapshot));
+  } catch (e) {}
+}
+
 let menuData = [];
+let snapshot = null;
+let liveData = null;
 
 // Original data below is kept as inline fallback
 const fallbackMenuData = [
@@ -527,15 +622,23 @@ function renderItemsGrouped(items) {
   return html;
 }
 
-async function loadRatings() {
-  if (typeof fbLoadCollection !== 'undefined' && isFirebaseConfigured()) {
-    try {
-      const all = await fbLoadCollection('ratings');
-      if (all) {
-        all.forEach(r => { ratingsCache[r.itemId] = r; });
-      }
-    } catch(e) {}
-  }
+function rebuildRatingsFromSnapshot(items) {
+  ratingsCache = {};
+  (items || []).forEach(item => {
+    const id = Number(item.id);
+    const count = Number(item.ratingCount) || 0;
+    if (!count) return;
+    ratingsCache[id] = { itemId: id, total: Number(item.ratingTotal) || 0, count };
+  });
+}
+
+function rebuildRatingsFromLive(ratings) {
+  ratingsCache = {};
+  (ratings || []).forEach(r => {
+    const id = Number(r.itemId);
+    if (!id) return;
+    ratingsCache[id] = { itemId: id, total: Number(r.total) || 0, count: Number(r.count) || 0 };
+  });
 }
 
 function getMyRating(id) {
@@ -564,8 +667,6 @@ async function saveRating(itemId, newStars) {
   const oldStars = getMyRating(itemId);
   setMyRating(itemId, newStars);
 
-  if (typeof fbSaveDoc === 'undefined' || !isFirebaseConfigured()) return;
-
   const r = ratingsCache[itemId] || { itemId, total: 0, count: 0 };
   if (oldStars > 0) {
     r.total += (newStars - oldStars);
@@ -574,8 +675,15 @@ async function saveRating(itemId, newStars) {
     r.count += 1;
   }
   ratingsCache[itemId] = r;
-  await fbSaveDoc('ratings', String(itemId), r);
   renderMenu();
+
+  try {
+    await restPatchDoc('ratings', String(itemId), {
+      itemId: Number(itemId),
+      total: Number(r.total) || 0,
+      count: Number(r.count) || 0
+    });
+  } catch (e) {}
 }
 
 function renderStars(itemId, section, subsection) {
@@ -595,6 +703,7 @@ function renderStars(itemId, section, subsection) {
 
 /* ─── ITEM BACKGROUND IMAGES ─── */
 const itemImageCache = new Map();
+const itemImagePending = new Map();
 let cardImageObserver = null;
 
 function escAttr(str) {
@@ -625,22 +734,23 @@ function markMatches(text) {
 
 async function loadItemImageData(id) {
   if (itemImageCache.has(id)) return itemImageCache.get(id);
-  if (typeof fbGetItemImage === 'undefined' ||
-      typeof isFirebaseConfigured === 'undefined' ||
-      !isFirebaseConfigured()) {
-    return null;
-  }
-  try {
-    const data = await fbGetItemImage(id);
-    itemImageCache.set(id, data);
-    return data;
-  } catch (e) {
-    return null;
-  }
+  if (itemImagePending.has(id)) return itemImagePending.get(id);
+
+  const promise = restGetDoc('menuImages', id)
+    .then(doc => {
+      const src = doc && typeof doc.image === 'string' ? doc.image : null;
+      itemImageCache.set(id, src);
+      return src;
+    })
+    .catch(() => null)
+    .finally(() => itemImagePending.delete(id));
+
+  itemImagePending.set(id, promise);
+  return promise;
 }
 
-function paintCardImage(card, data, position) {
-  card.style.backgroundImage = `url("${data}")`;
+function paintCardImage(card, src, position) {
+  card.style.backgroundImage = `url("${src}")`;
   card.style.backgroundPosition = position;
   card.classList.remove('image-pending');
   card.classList.add('image-loaded');
@@ -649,32 +759,39 @@ function paintCardImage(card, data, position) {
 function clearCardImage(card) {
   card.classList.remove('has-image', 'image-pending', 'image-loaded');
   card.style.backgroundImage = '';
+  card.style.backgroundPosition = '';
 }
 
 async function hydrateCardImage(card) {
-  const id = Number(card.dataset.imageId);
-  const data = await loadItemImageData(id);
-
-  if (!data) {
-    clearCardImage(card);
-    return;
-  }
-
   const position = ['top', 'bottom', 'center'].includes(card.dataset.imagePosition)
     ? card.dataset.imagePosition
     : 'center';
+  const staticSrc = card.dataset.imageSrc || '';
+  const needsLive = card.dataset.imageLive === '1';
+  const id = Number(card.dataset.imageId);
 
-  // Linked images load from another website. Wait for them to arrive so the
-  // shimmer stays visible, and fall back to a plain card if the link is dead.
-  if (/^https?:\/\//i.test(data)) {
-    const probe = new Image();
-    probe.onload = () => paintCardImage(card, data, position);
-    probe.onerror = () => clearCardImage(card);
-    probe.src = data;
-    return;
+  if (staticSrc) {
+    // Linked photos (not downloaded into the snapshot) need a probe so a
+    // dead link falls back to a plain card instead of a dark rectangle.
+    if (/^https?:\/\//i.test(staticSrc)) {
+      const probe = new Image();
+      probe.onload = () => paintCardImage(card, staticSrc, position);
+      probe.onerror = () => { if (!needsLive) clearCardImage(card); };
+      probe.src = staticSrc;
+    } else {
+      paintCardImage(card, staticSrc, position);
+    }
   }
+  if (!needsLive) return;
 
-  paintCardImage(card, data, position);
+  // A newer photo was saved in the admin panel since the last snapshot.
+  // Keep showing the old photo until the fresh one has been downloaded.
+  const freshSrc = await loadItemImageData(id);
+  if (freshSrc) {
+    paintCardImage(card, freshSrc, position);
+  } else if (!staticSrc) {
+    clearCardImage(card);
+  }
 }
 
 function applyItemImages() {
@@ -693,7 +810,7 @@ function applyItemImages() {
       obs.unobserve(entry.target);
       hydrateCardImage(entry.target);
     });
-  }, { rootMargin: '300px 0px' });
+  }, { rootMargin: '400px 0px' });
 
   cards.forEach(card => cardImageObserver.observe(card));
 }
@@ -705,19 +822,23 @@ function renderItems(items) {
       `<span class="item-ingredient">${markMatches(ing)}</span>`
     ).join('');
 
-    const hasImage = !!(item.hasImage || item.image);
     const position = ['top', 'bottom', 'center'].includes(item.imagePosition) ? item.imagePosition : 'center';
-    const lazyImage = hasImage && !item.image;
-    const imageAttrs = lazyImage
-      ? ` data-image-id="${item.id}" data-image-position="${position}"`
+    const cachedImage = itemImageCache.get(item.id);
+    const imageSrc = itemImageCache.has(item.id) ? (cachedImage || '') : (item.image || '');
+    // Items whose photo changed in the admin panel need a small background
+    // Firestore read, but only once the card is actually near the viewport.
+    const needsLiveImage = !itemImageCache.has(item.id) && item.hasImage !== false &&
+      (!item.image || Number(item.imageUpdatedAt || 0) > Number(item.imageVersion || 0));
+    const hasImage = !!(imageSrc || needsLiveImage);
+    const imageAttrs = hasImage
+      ? ` data-image-id="${item.id}" data-image-position="${position}"` +
+        (imageSrc ? ` data-image-src="${escAttr(imageSrc)}"` : '') +
+        (needsLiveImage ? ' data-image-live="1"' : '')
       : '';
-    const imageStyle = item.image
-      ? ` style="background-image:url('${escAttr(item.image)}');background-position:${position};"`
-      : '';
-    const imageClass = hasImage ? ` has-image${lazyImage ? ' image-pending' : ''}` : '';
+    const imageClass = hasImage ? ' has-image' : '';
 
     return `
-    <div class="menu-item${imageClass}"${imageAttrs}${imageStyle}>
+    <div class="menu-item${imageClass}"${imageAttrs}>
       <div class="item-header">
         <span class="item-name">${markMatches(item.name)}</span>
         <span class="item-price">${item.price} ETB</span>
@@ -1020,43 +1141,159 @@ function applyRestaurantInfo(raw) {
   socialWrap.hidden = socialWrap.childElementCount === 0;
 }
 
-async function loadRestaurantInfo() {
-  let cached = null;
+function readCachedRestaurant() {
   try {
-    cached = JSON.parse(localStorage.getItem(RESTAURANT_CACHE_KEY) || 'null');
+    const cached = JSON.parse(localStorage.getItem(RESTAURANT_CACHE_KEY) || 'null');
+    return cached && typeof cached === 'object' ? cached : null;
   } catch (e) {
-    cached = null;
+    return null;
   }
-  if (cached && typeof cached === 'object') {
-    applyRestaurantInfo(cached);
-  }
-
-  if (typeof isFirebaseConfigured === 'undefined' || !isFirebaseConfigured()) return;
-
-  try {
-    const remote = await fbGetDoc('restaurant', 'info');
-    if (remote && typeof remote === 'object') {
-      applyRestaurantInfo(remote);
-      try {
-        localStorage.setItem(RESTAURANT_CACHE_KEY, JSON.stringify(remote));
-      } catch (e) {}
-    }
-  } catch (e) {}
 }
 
-(async () => {
-  const data = await loadMenuData();
-  if (data && data.length > 0) {
-    menuData = data;
-  } else {
-    menuData = fallbackMenuData;
+function resolveRestaurantInfo() {
+  if (liveData && liveData.restaurant) return liveData.restaurant;
+  return readCachedRestaurant() || (snapshot && snapshot.restaurant) || null;
+}
+
+function mergeLiveItem(liveItem, snapItem) {
+  const item = { ...liveItem };
+  item.id = Number(item.id);
+  delete item._id;
+  item.ingredients = Array.isArray(item.ingredients) ? item.ingredients : [];
+  if (item.price != null) item.price = Number(item.price);
+
+  // The snapshot holds fast, optimized copies of the photos. Keep using the
+  // static file unless the admin panel saved a newer photo.
+  if (snapItem && snapItem.image && item.hasImage !== false) {
+    item.image = snapItem.image;
+    item.imageVersion = Number(snapItem.imageVersion) || 0;
   }
-  await loadRatings();
+  if (item.imageUpdatedAt) item.imageUpdatedAt = Number(item.imageUpdatedAt);
+  return item;
+}
+
+function menuSignature(items) {
+  return items.map(item => {
+    const rating = ratingsCache[item.id];
+    return [
+      item.id, item.active !== false ? 1 : 0, item.name, item.price, item.desc,
+      item.section, item.type || '', item.subsection || '', item.image || '',
+      Number(item.imageUpdatedAt || 0) > Number(item.imageVersion || 0) ? 1 : 0,
+      rating ? rating.total : 0, rating ? rating.count : 0
+    ].join('\u0001');
+  }).join('\u0002');
+}
+
+let lastMenuSignature = '';
+
+function applyMenuData() {
+  const snapItems = snapshot && Array.isArray(snapshot.items) ? snapshot.items : [];
+  const snapById = new Map(snapItems.map(item => [Number(item.id), item]));
+
+  let items;
+  if (liveData && Array.isArray(liveData.items) && liveData.items.length) {
+    items = liveData.items.map(item => mergeLiveItem(item, snapById.get(Number(item.id))));
+  } else if (snapItems.length) {
+    items = snapItems.map(item => ({
+      ...item,
+      id: Number(item.id),
+      ingredients: Array.isArray(item.ingredients) ? item.ingredients : []
+    }));
+  } else {
+    items = fallbackMenuData.map(item => ({ ...item }));
+  }
+
+  if (liveData && Array.isArray(liveData.ratings)) rebuildRatingsFromLive(liveData.ratings);
+  else rebuildRatingsFromSnapshot(items);
+
+  items.sort((a, b) => a.id - b.id);
+  menuData = items;
+
+  applyRestaurantInfo(resolveRestaurantInfo());
+
+  // Background refreshes usually return exactly what is already on screen.
+  // Skipping that render keeps photos from being downloaded twice.
+  const signature = menuSignature(items);
+  if (firstRenderDone && signature === lastMenuSignature) return;
+  lastMenuSignature = signature;
   renderMenu();
-  initQR();
-  loadRestaurantInfo();
+}
+
+let firstRenderDone = false;
+
+function hideSplash() {
+  const splash = document.getElementById('splash');
+  if (splash) splash.classList.add('splash-hidden');
+}
+
+function scheduleQR() {
+  const run = () => initQR();
+  if ('requestIdleCallback' in window) {
+    window.requestIdleCallback(run, { timeout: 3000 });
+  } else {
+    setTimeout(run, 1500);
+  }
+}
+
+function renderFirst() {
+  applyMenuData();
+  if (firstRenderDone) return;
+  firstRenderDone = true;
+  hideSplash();
+  scheduleQR();
+}
+
+async function refreshLiveData() {
+  const [itemsResult, ratingsResult, restaurantResult] = await Promise.allSettled([
+    restList('menuItems'),
+    restList('ratings'),
+    // restaurant/info usually does not exist yet; listing the collection
+    // avoids a noisy 404 in the browser console.
+    restList('restaurant').then(docs => (docs || []).find(doc => doc._id === 'info') || null)
+  ]);
+
+  const items = itemsResult.status === 'fulfilled' ? itemsResult.value : null;
+  const ratings = ratingsResult.status === 'fulfilled' ? ratingsResult.value : null;
+  const restaurant = restaurantResult.status === 'fulfilled' ? restaurantResult.value : null;
+  if (!items && !ratings && !restaurant) return;
+
+  liveData = { items, ratings, restaurant };
+  if (restaurant) {
+    try {
+      localStorage.setItem(RESTAURANT_CACHE_KEY, JSON.stringify(restaurant));
+    } catch (e) {}
+  }
+
+  // Wait for the snapshot on the very first visit, so cards get their static
+  // images instead of one Firestore request per photo.
+  if (firstRenderDone) applyMenuData();
+}
+
+(async function boot() {
+  snapshot = readCachedSnapshot();
+  if (snapshot) renderFirst();
+
+  const snapshotPromise = fetchMenuSnapshot().then(fresh => {
+    if (!fresh) {
+      if (!firstRenderDone) renderFirst();
+      return;
+    }
+
+    const changed = !snapshot || snapshot.generatedAt !== fresh.generatedAt;
+    snapshot = fresh;
+    if (changed) cacheSnapshot(fresh);
+    if (!firstRenderDone) renderFirst();
+    else if (changed) applyMenuData();
+  });
+
+  // Live refresh starts only after the first menu paint (or the snapshot
+  // attempt settles), so it never competes with the images on screen.
+  const livePromise = snapshotPromise.then(() => refreshLiveData());
+
+  // Never leave the splash up if the network stalls.
   setTimeout(() => {
-    const splash = document.getElementById('splash');
-    if (splash) splash.classList.add('splash-hidden');
-  }, 3000);
+    if (!firstRenderDone) renderFirst();
+  }, 1500);
+
+  await livePromise;
 })();

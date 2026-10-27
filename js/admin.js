@@ -1372,10 +1372,21 @@ itemForm.addEventListener('submit', async (e) => {
   // Older items stored the image inline. Move it into menuImages on save so
   // the (possibly large) data URL stops living inside the menu document.
   const legacyInlineImage = !!(existingItem && existingItem.image && !existingItem.hasImage);
+  const imageChanged = !!pendingImageData && (pendingImageDirty || legacyInlineImage);
+  const imageRemoved = pendingImageDirty && !pendingImageData;
+  // One shared timestamp for the image document and the item, so the customer
+  // page can tell exactly when a snapshot photo is out of date.
+  const imageVersion = imageChanged ? Date.now() : 0;
 
   if (pendingImageData || (!pendingImageDirty && editingHasImage)) {
     item.hasImage = true;
     item.imagePosition = IMAGE_POSITIONS.includes(itemImagePosition.value) ? itemImagePosition.value : 'center';
+  }
+
+  if (imageChanged) {
+    item.imageUpdatedAt = imageVersion;
+  } else if (!imageRemoved && existingItem && existingItem.imageUpdatedAt) {
+    item.imageUpdatedAt = existingItem.imageUpdatedAt;
   }
 
   saveItemBtn.disabled = true;
@@ -1384,8 +1395,8 @@ itemForm.addEventListener('submit', async (e) => {
   try {
     // Save a new/changed image first, so an item is never published with a
     // `hasImage` flag that points at a missing image document.
-    if (pendingImageData && (pendingImageDirty || legacyInlineImage)) {
-      const imageSaved = await fbSaveItemImage(id, pendingImageData);
+    if (imageChanged) {
+      const imageSaved = await fbSaveItemImage(id, pendingImageData, imageVersion);
       if (!imageSaved) {
         throw new Error('Could not save the image. Check your connection and try a slightly smaller photo.');
       }

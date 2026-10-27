@@ -86,7 +86,7 @@ body {
 }
 
 .header {
-  background: linear-gradient(rgba(240, 160, 80, 0.5), rgba(255, 179, 102, 0.5)), url('../images/ChatGPT Image Jul 1, 2026, 09_53_36 AM.png') center / cover no-repeat;
+  background: linear-gradient(rgba(240, 160, 80, 0.5), rgba(255, 179, 102, 0.5)), url('../images/header.webp') center / cover no-repeat;
   color: #3d2b1f;
   text-align: center;
   padding: 60px 20px;
@@ -795,6 +795,12 @@ a.contact-chip:hover {
   text-align: center;
   padding: 20px;
   font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .header {
+    background-image: linear-gradient(rgba(240, 160, 80, 0.5), rgba(255, 179, 102, 0.5)), url('../images/header-mobile.webp');
+  }
 }
 
 @media (max-width: 480px) {

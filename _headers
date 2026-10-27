@@ -1,6 +1,21 @@
+# Firebase Hosting does not read this file; the real rules are in the
+# "hosting.headers" section of firebase.json. Kept in sync for static hosts
+# (Netlify, Cloudflare Pages) that do support _headers.
 /*
   X-Frame-Options: DENY
   X-Content-Type-Options: nosniff
   Referrer-Policy: no-referrer
   Permissions-Policy: camera=(), microphone=(), geolocation=()
   Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+
+/images/menu/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/images/header.webp
+  Cache-Control: public, max-age=604800
+
+/images/header-mobile.webp
+  Cache-Control: public, max-age=604800
+
+/data/menu.json
+  Cache-Control: public, max-age=300, stale-while-revalidate=86400
