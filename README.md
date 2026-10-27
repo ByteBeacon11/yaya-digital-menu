@@ -28,11 +28,15 @@ firebase deploy --only hosting
 ```
 
 `npm run snapshot` reads the public Firestore data, compresses every item photo into WebP
-(680 px wide), and rebuilds the header images from `assets-src/header.png`.
+(up to 1200 px wide at high quality), and rebuilds the header images from `assets-src/header.png`.
+Linked photos on Wikimedia are automatically requested at a larger size when the stored link is
+smaller than 1280 px.
 
 ## Notes
 
 - Do not delete `data/menu.json` or `images/menu/` from a deployment.
 - `assets-src/`, `tools/`, and `node_modules/` are excluded from hosting by `firebase.json`.
+- Photos uploaded or pasted in the admin panel are stored at up to 1600 px edge and high JPEG
+  quality, so new photos stay sharp on high-DPI phones without any extra step.
 - Response headers (security and caching) live in the `hosting.headers` section of
   `firebase.json`, because Firebase Hosting does not read the `_headers` file.

@@ -24,8 +24,12 @@ const FS_BASE = `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/data
 const ROOT = path.resolve(__dirname, '..');
 const MENU_IMAGE_DIR = path.join(ROOT, 'images', 'menu');
 const DATA_DIR = path.join(ROOT, 'data');
-const IMAGE_WIDTH = 680;
-const IMAGE_QUALITY = 64;
+const IMAGE_WIDTH = 1200;
+const IMAGE_QUALITY = 78;
+// Wikimedia thumbnails are usually stored at 960px, which is not enough for a
+// full-width card on a 3x phone. Their thumbnail service can generate larger
+// copies on demand.
+const WIKIMEDIA_UPGRADE_WIDTH = 1280;
 
 function fromFsValue(value) {
   if (!value || typeof value !== 'object') return null;
@@ -79,6 +83,15 @@ async function getDoc(collection, id) {
   return { id, ...fromFsFields(json.fields) };
 }
 
+function largerImageCandidates(source) {
+  if (!/^https?:\/\/(?:[a-z0-9-]+\.)?wikimedia\.org\//i.test(source)) return [];
+  const match = source.match(/\/(\d+)px-([^/]+)$/);
+  if (!match) return [];
+  const width = Number(match[1]);
+  if (!width || width >= WIKIMEDIA_UPGRADE_WIDTH) return [];
+  return [source.replace(/\/\d+px-/, `/${WIKIMEDIA_UPGRADE_WIDTH}px-`)];
+}
+
 async function fetchImageBuffer(source, label) {
   if (source.startsWith('data:')) {
     const match = source.match(/^data:([^;,]+)?(;base64)?,(.*)$/s);
@@ -89,24 +102,28 @@ async function fetchImageBuffer(source, label) {
 
   if (!/^https?:\/\//i.test(source)) throw new Error('Unsupported image source');
 
+  const urls = [...largerImageCandidates(source), source];
   let lastError = null;
-  for (let attempt = 1; attempt <= 3; attempt++) {
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 20000);
-    try {
-      const res = await fetch(source, {
-        signal: controller.signal,
-        headers: { 'User-Agent': 'Mozilla/5.0 (compatible; YayaMenuSnapshot/1.0)' }
-      });
-      if (!res.ok) throw new Error(`Image HTTP ${res.status}`);
-      const type = res.headers.get('content-type') || '';
-      if (type && !type.startsWith('image/')) throw new Error(`Not an image (${type})`);
-      return Buffer.from(await res.arrayBuffer());
-    } catch (err) {
-      lastError = err;
-      if (attempt < 3) await new Promise(resolve => setTimeout(resolve, attempt * 500));
-    } finally {
-      clearTimeout(timer);
+
+  for (const url of urls) {
+    for (let attempt = 1; attempt <= 2; attempt++) {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 20000);
+      try {
+        const res = await fetch(url, {
+          signal: controller.signal,
+          headers: { 'User-Agent': 'Mozilla/5.0 (compatible; YayaMenuSnapshot/1.0)' }
+        });
+        if (!res.ok) throw new Error(`Image HTTP ${res.status}`);
+        const type = res.headers.get('content-type') || '';
+        if (type && !type.startsWith('image/')) throw new Error(`Not an image (${type})`);
+        return Buffer.from(await res.arrayBuffer());
+      } catch (err) {
+        lastError = err;
+        if (attempt < 2) await new Promise(resolve => setTimeout(resolve, 500));
+      } finally {
+        clearTimeout(timer);
+      }
     }
   }
   throw lastError || new Error('Image download failed');

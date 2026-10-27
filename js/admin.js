@@ -848,10 +848,12 @@ async function toggleCategory(section, active) {
 }
 
 /* ─── ITEM BACKGROUND IMAGES ─── */
-const IMAGE_MAX_EDGE = 1200;
-// Firestore allows 1 MiB per document. Keeping the data URL under ~300k chars
-// (roughly 220 KB of JPEG) leaves plenty of headroom and keeps menu loads light.
-const IMAGE_MAX_DATA_URL = 300000;
+// Full-width cards on a 3x phone need roughly 1050px, so keep enough source
+// detail for portrait photos too (where the long edge is the height).
+const IMAGE_MAX_EDGE = 1600;
+// Firestore allows 1 MiB per document. Keeping the data URL under ~700k chars
+// (roughly 525 KB of JPEG) leaves headroom while preserving sharp detail.
+const IMAGE_MAX_DATA_URL = 700000;
 const IMAGE_POSITIONS = ['center', 'top', 'bottom'];
 
 function loadImageElement(file) {
@@ -962,10 +964,10 @@ async function compressImageForMenu(file) {
 
   const img = await loadImageElement(file);
   let edge = IMAGE_MAX_EDGE;
-  let quality = 0.84;
+  let quality = 0.9;
   let dataUrl = '';
 
-  for (let attempt = 0; attempt < 8; attempt++) {
+  for (let attempt = 0; attempt < 10; attempt++) {
     const scale = Math.min(1, edge / Math.max(img.naturalWidth, img.naturalHeight));
     const width = Math.max(1, Math.round(img.naturalWidth * scale));
     const height = Math.max(1, Math.round(img.naturalHeight * scale));
@@ -984,10 +986,10 @@ async function compressImageForMenu(file) {
     dataUrl = canvas.toDataURL('image/jpeg', quality);
     if (dataUrl.length <= IMAGE_MAX_DATA_URL) return dataUrl;
 
-    quality = Math.round((quality - 0.12) * 100) / 100;
-    if (quality < 0.55) {
-      edge = Math.round(edge * 0.8);
-      quality = 0.72;
+    quality = Math.round((quality - 0.05) * 100) / 100;
+    if (quality < 0.7) {
+      edge = Math.round(edge * 0.85);
+      quality = 0.85;
     }
   }
 
